@@ -7,7 +7,7 @@ const Image = function (image) {
 }
 // Just for testing purposes
 Image.get_all = function (result) {
-    db.query("SELECT * FROM Images", function (err, image) {
+    db.query("SELECT * FROM image", function (err, image) {
         if (err)
             throw err;
         else
@@ -17,7 +17,7 @@ Image.get_all = function (result) {
 }
 // Lấy hình của sản phẩm đó
 Image.getByProductId = function (id, result) {
-    db.query("SELECT * FROM Images WHERE ProductId = ?", id, function (err, image) {
+    db.query("SELECT * FROM image WHERE ProductId = ?", id, function (err, image) {
         if (err || image.length == 0)
             throw err;
         else
@@ -27,7 +27,7 @@ Image.getByProductId = function (id, result) {
 }
 
 Image.create = function (data, result) {
-    db.query("INSERT INTO Images SET ?", data, function (err, Image) {
+    db.query("INSERT INTO image SET ?", data, function (err, Image) {
         if (err) {
             throw err;
         }
@@ -37,7 +37,7 @@ Image.create = function (data, result) {
 }
 
 Image.detele = function (data, result) {
-    db.query("DELETE FROM Images WHERE ImageId =?", data.ImageID, function (err) {
+    db.query("DELETE FROM image WHERE ImageId =?", data.ImageID, function (err) {
         if (err) {
             throw err;
         }
@@ -47,7 +47,7 @@ Image.detele = function (data, result) {
 }
 
 Image.update = function (data, result) {
-    db.query("UPDATE Images SET ImageDescription =?, ImageUrl =? WHERE ImageId =?", 
+    db.query("UPDATE image SET ImageDescription =?, ImageUrl =? WHERE ImageId =?", 
     [data.ImageDescription,data.ImageUrl,data.ImageID], function (err, Image) {
         if (err) {
             throw err;

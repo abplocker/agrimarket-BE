@@ -34,10 +34,13 @@ Product.getDetail = function (id, result) {
 // Function View catalog
 Product.getByCategoryId = function (id, result) {
     db.query("SELECT * FROM product WHERE CategoryId = ?", id, function (err, product) {
-        if (err || user.length == 0)
+        if (err || product.length == 0)
             throw err;
         else
+        {
+            console.log(product)
             result(product);
+        }
         // Trả về thông tin của nhiều sản phẩm trong category
     });
 }

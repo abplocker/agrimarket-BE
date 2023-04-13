@@ -4,7 +4,7 @@ module.exports = function (router) {
 
 	router.get('/product/all', productRouter.get_all);
 
-	router.get('product/category/:id', productRouter.getByCategoryId);
+	router.get('/product/category/:id', productRouter.getByCategoryId);
 
     router.get('/product/:id', productRouter.getDetail);
 

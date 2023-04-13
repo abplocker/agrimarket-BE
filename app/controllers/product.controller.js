@@ -13,14 +13,21 @@ exports.getByCategoryId = function (req, res) {
     });
 }
 
-exports.getDetail = function (req, res) {
-    Product.getDetail(req.params.id, function (data) {
-        res.send({ product: data });
-    });
-    Image.getByProductId(req.params.id, function (data) {
-        res.send({ images: data });
-    });
-}
+exports.getDetail = async function (req, res) {
+    try {
+      const [product, images] = await Promise.all([
+        new Promise((resolve, reject) => {
+          Product.getDetail(req.params.id, resolve);
+        }),
+        new Promise((resolve, reject) => {
+          Image.getByProductId(req.params.id, resolve);
+        })
+      ]);
+      res.send({ product: product, images: images });
+    } catch (err) {
+      res.status(500).send({ error: err });
+    }
+  }
 
 exports.create = function (req, res) {
 	Product.create(req.body, function (data) {
