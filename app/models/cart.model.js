@@ -9,7 +9,7 @@ const CartItem = function (cartitem) {
 
 CartItem.getByUserId = function (id, result) {
     db.query("SELECT * FROM cartitem WHERE UserId = ?", id, function (err, cartitem) {
-        if (err || Cart.length == 0)
+        if (err || cartitem.length == 0)
             throw err;
         else
             result(cartitem);
