@@ -10,7 +10,10 @@ app.use(cors());
 // Các routers
 
 require('./app/routers/user.router')(app);
-
+require('./app/routers/cart.router')(app);
+require('./app/routers/category.router')(app);
+require('./app/routers/product.router')(app);
+// // require('./app/routers/order.router')(app);
 
 app.listen(3000, function () {
 	console.log("Server listening on http://localhost:3000");

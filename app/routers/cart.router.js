@@ -2,7 +2,7 @@ module.exports = function (router) {
 
 	var cartRouter = require('../controllers/cart.controller');
 
-	router.get('/cart/:UserID', cartRouter.get_all);
+	router.get('/cart/:userID', cartRouter.getByUserId);
 
 	router.post('/cart/add', cartRouter.addCartItem);
 

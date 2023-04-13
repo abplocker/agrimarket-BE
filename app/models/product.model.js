@@ -13,14 +13,13 @@ const Product = function (product) {
     this.UserId = product.UserId;
 }
 
-product.get_all = function (result) {
+Product.get_all = function (result) {
     db.query("SELECT * FROM product", function (err, product) {
         if (err)
             throw err;
         else
             result(product);
     });
-
 }
 // View product details
 Product.getDetail = function (id, result) {
@@ -43,7 +42,7 @@ Product.getByCategoryId = function (id, result) {
     });
 }
 
-product.create = function (data, result) {
+Product.create = function (data, result) {
     db.query("INSERT INTO product SET ?", data, function (err, product) {
         if (err) {
             throw err;
@@ -53,7 +52,7 @@ product.create = function (data, result) {
     });
 }
 
-product.detele = function (data, result) {
+Product.detele = function (data, result) {
     db.query("DELETE FROM product WHERE ProductId =?", data.productID, function (err) {
         if (err) {
             throw err;
@@ -63,7 +62,7 @@ product.detele = function (data, result) {
     });
 }
 
-product.update_info = function (data, result) {
+Product.update_info = function (data, result) {
     db.query("UPDATE product SET ProductName =?, ProductSlug =?, ProductPrice=?, ProductUpdatedAt=? WHERE ProductId =?", 
     [data.ProductName,data.ProductSlug,data.ProductPrice,data.ProductUpdatedAt,data.ProductId], function (err, product) {
         if (err) {

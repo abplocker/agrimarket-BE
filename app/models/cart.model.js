@@ -66,4 +66,4 @@ CartItem.update_info = function (data, result) {
             result({ id: cartitem.CartID, ...data });
     });
 }
-module.exports = Cart;
+module.exports = CartItem;

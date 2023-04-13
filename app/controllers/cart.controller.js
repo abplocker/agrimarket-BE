@@ -1,7 +1,7 @@
 var Cart = require('../models/cart.model');
 
 exports.getByUserId = function (req, res) {
-	Cart.getByCategoryId(req.params.UserID, function (data) {
+	Cart.getByUserId(req.params.userID, function (data) {
         res.send({ result: data });
     });
 }
@@ -13,7 +13,7 @@ exports.addCartItem = function (req, res) {
 }
 
 exports.addOneCartItem = function (req, res) {
-	Cart.create(req.body, function (data) {
+	Cart.addOneCartItem(req.body, function (data) {
         res.send({ result: data });
     });
 }
