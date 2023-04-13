@@ -7,19 +7,32 @@ exports.get_all = function (req, res) {
 	});
 }
 
-exports.getById = function (req, res) {
-	User.getById(req.params.id, function (data) {
-        res.send({ user: data });
-    });
-	Address.getByUserId(req.params.id, function (data) {
-        res.send({ address: data });
-    });
-}
+exports.getById = async (req, res) => {
+	const userId = req.params.id;
+	try {
+		const [user, address] = await Promise.all([
+			new Promise((resolve, reject) => {
+				User.getById(userId, (user) => {
+					resolve(user);
+				});
+			}),
+			new Promise((resolve, reject) => {
+				Address.getByUserId(userId, (address) => {
+					resolve(address);
+				});
+			}),
+		]);
+		res.send({ user, address });
+	} catch (err) {
+		console.error(err);
+		res.status(500).send('Server Error');
+	}
+};
 
 exports.createUser = function (req, res) {
 	User.create(req.body, function (data) {
-        res.send({ result: data });
-    });
+		res.send({ result: data });
+	});
 }
 
 exports.remove = function (req, res) {
@@ -27,10 +40,10 @@ exports.remove = function (req, res) {
 		res.send({ result: data });
 	});
 }
-exports.update_info = function (req,res){
+exports.update_info = function (req, res) {
 	User.update_info(req.body, function (data) {
-        res.send({ result: data });
-    });
+		res.send({ result: data });
+	});
 }
 
 
