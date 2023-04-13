@@ -38,7 +38,6 @@ Product.getByCategoryId = function (id, result) {
             throw err;
         else
         {
-            console.log(product)
             result(product);
         }
         // Trả về thông tin của nhiều sản phẩm trong category
