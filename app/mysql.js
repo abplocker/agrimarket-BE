@@ -1,3 +1,4 @@
+// Thay đổi với mỗi máy
 var mysql = require('mysql2');
 var connectionMySql = mysql.createConnection({
     host: "localhost",
