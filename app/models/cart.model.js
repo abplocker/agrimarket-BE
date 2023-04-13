@@ -17,7 +17,7 @@ CartItem.getByUserId = function (id, result) {
 }
 
 CartItem.addCartItem = function (data, result) {
-    db.query("INSERT INTO Carts SET ?", data, function (err, cartitem) {
+    db.query("INSERT INTO cartitem SET ?", data, function (err, cartitem) {
         if (err) {
             throw err;
         }
@@ -35,7 +35,7 @@ CartItem.addCartItem = function (data, result) {
 */
 // Cần xem lại
 CartItem.addOneCartItem = function (data, result){
-    db.query("UPDATE Carts SET Quantity = Quantity + 1, SumPrice = ? WHERE ProductID =?" 
+    db.query("UPDATE cartitem SET Quantity = Quantity + 1, SumPrice = ? WHERE ProductID =?" 
     ,[data.ProductPrice * data.Quantity,data.ProductId]
     ,function (err, cartitem) {
         if (err) {
@@ -47,7 +47,7 @@ CartItem.addOneCartItem = function (data, result){
 }
 
 CartItem.detele = function (data, result) {
-    db.query("DELETE FROM Carts WHERE CartId =?", data.CartID, function (err) {
+    db.query("DELETE FROM cartitem WHERE CartId =?", data.CartID, function (err) {
         if (err) {
             throw err;
         }
@@ -57,7 +57,7 @@ CartItem.detele = function (data, result) {
 }
 
 CartItem.update_info = function (data, result) {
-    db.query("UPDATE Carts SET FullName =?, Email =?, Phone=?, Avatar=? WHERE CartId =?", 
+    db.query("UPDATE cartitem SET FullName =?, Email =?, Phone=?, Avatar=? WHERE CartId =?", 
     [data.FullName,data.Email,data.Phone,data.Avatar,data.CartID], function (err, cartitem) {
         if (err) {
             throw err;

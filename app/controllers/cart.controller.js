@@ -7,7 +7,7 @@ exports.getByUserId = function (req, res) {
 }
 
 exports.addCartItem = function (req, res) {
-	Cart.create(req.body, function (data) {
+	Cart.addCartItem(req.body, function (data) {
         res.send({ result: data });
     });
 }

@@ -6,7 +6,7 @@ module.exports = function (router) {
 
 	router.post('/cart/add', cartRouter.addCartItem);
 
-    router.post('/cart/add', cartRouter.addOneCartItem);
+    router.post('/cart/add1', cartRouter.addOneCartItem);
 
 	router.delete('/cart/remove', cartRouter.remove);
 
