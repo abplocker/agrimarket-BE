@@ -22,7 +22,7 @@ CartItem.addCartItem = function (data, result) {
             throw err;
         }
         else
-            result({ id: cartitem.CartID,...data });
+            result({ id: cartitem.CartID, ...data });
     });
 }
 // Add 1 similar product in cart so use PUT in controller b/c just update quantity cartitem
@@ -33,18 +33,42 @@ CartItem.addCartItem = function (data, result) {
         "ProductPrice": ""
     }
 */
-// Cần xem lại
-CartItem.addOneCartItem = function (data, result){
-    db.query("UPDATE cartitem SET Quantity = Quantity + 1, SumPrice = ? WHERE ProductID =?" 
-    ,[data.ProductPrice * data.Quantity,data.ProductId]
-    ,function (err, cartitem) {
-        if (err) {
-            throw err;
-        }
-        else
-            result({ id: cartitem.CartID,...data });
-    });
+// ---------------------------------Cần xem lại---------------------------------------
+CartItem.addOneCartItem = function (data, result) {
+    db.query("UPDATE cartitem SET Quantity = Quantity + 1, SumPrice = ? WHERE ProductID =?"
+        , [data.ProductPrice * data.Quantity, data.ProductId]
+        , function (err, cartitem) {
+            if (err) {
+                throw err;
+            }
+            else
+                result({ id: cartitem.CartID, ...data });
+        });
 }
+//-------------------------------------------------------------------------------------
+
+
+// Thay đổi giá trị số lượng
+/*
+    TH1: User click tăng 1. Gọi script, truyền change_amount = quantity + 1
+    TH2: User click giảm 1. Gọi script, truyền change_amount = quantity - 1
+    TH3: User sửa trực tiếp số lượng. Gọi script, truyền change_amount = số lượng user nhập
+
+    Thực thi lệnh UPDATE, gọi đến trigger update_amount
+*/  
+
+CartItem.changeQuantity = function (data, result) {
+    db.query("UPDATE cartitem SET Quantity =? WHERE CartItemID =?"
+        , [data.ChangeAmount,data.CartID]
+        , function (err, cartitem) {
+            if (err) {
+                throw err;
+            }
+            else
+                result({ id: cartitem.CartID, ...data });
+        });
+}
+
 
 CartItem.detele = function (data, result) {
     db.query("DELETE FROM cartitem WHERE CartId =?", data.CartID, function (err) {
@@ -57,13 +81,14 @@ CartItem.detele = function (data, result) {
 }
 
 CartItem.update_info = function (data, result) {
-    db.query("UPDATE cartitem SET FullName =?, Email =?, Phone=?, Avatar=? WHERE CartId =?", 
-    [data.FullName,data.Email,data.Phone,data.Avatar,data.CartID], function (err, cartitem) {
-        if (err) {
-            throw err;
-        }
-        else
-            result({ id: cartitem.CartID, ...data });
-    });
+    db.query("UPDATE cartitem SET FullName =?, Email =?, Phone=?, Avatar=? WHERE CartId =?",
+        [data.FullName, data.Email, data.Phone, data.Avatar, data.CartID], function (err, cartitem) {
+            if (err) {
+                throw err;
+            }
+            else
+                result({ id: cartitem.CartID, ...data });
+        });
 }
+
 module.exports = CartItem;

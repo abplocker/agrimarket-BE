@@ -11,9 +11,16 @@ exports.addCartItem = function (req, res) {
         res.send({ result: data });
     });
 }
-
+// Not done yet
 exports.addOneCartItem = function (req, res) {
 	Cart.addOneCartItem(req.body, function (data) {
+        res.send({ result: data });
+    });
+}
+
+
+exports.changeQuantity = function (req, res) {
+    Cart.changeQuantity(req.body,function (data) {
         res.send({ result: data });
     });
 }
