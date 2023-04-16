@@ -14,8 +14,8 @@ app.use(cors());
 require('./app/routers/category_router')(app);
 require('./app/routers/product_router')(app);
 require('./app/routers/guest_router')(app);
-// Muốn vào phần user, cart ...  cần đăng nhập trước rồi hẳn tính
 app.use(auth_middleware.isAuth);
+// Token hợp lệ, mới chạy vào các router sau
 require('./app/routers/user_router')(app);
 require('./app/routers/cart_router')(app);
 // // require('./app/routers/order_router')(app);
