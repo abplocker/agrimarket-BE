@@ -10,7 +10,7 @@ const CartItem = function (cartitem) {
 CartItem.getByUserId = function (id, result) {
     db.query("SELECT * FROM cartitem WHERE UserId = ?", id, function (err, cartitem) {
         if (err || cartitem.length == 0)
-            throw err;
+            result (err.sqlMessage);
         else
             result(cartitem);
     });
@@ -19,7 +19,7 @@ CartItem.getByUserId = function (id, result) {
 CartItem.addCartItem = function (data, result) {
     db.query("INSERT INTO cartitem SET ?", data, function (err, cartitem) {
         if (err) {
-            throw err;
+            result (err.sqlMessage);
         }
         else
             result({ id: cartitem.CartID, ...data });
@@ -39,7 +39,7 @@ CartItem.addOneCartItem = function (data, result) {
         , [data.ProductPrice * data.Quantity, data.ProductId]
         , function (err, cartitem) {
             if (err) {
-                throw err;
+                result (err.sqlMessage);
             }
             else
                 result({ id: cartitem.CartID, ...data });
@@ -62,7 +62,7 @@ CartItem.changeQuantity = function (data, result) {
         , [data.ChangeAmount,data.CartID]
         , function (err, cartitem) {
             if (err) {
-                throw err;
+                result (err.sqlMessage);
             }
             else
                 result({ id: cartitem.CartID, ...data });
@@ -73,7 +73,7 @@ CartItem.changeQuantity = function (data, result) {
 CartItem.detele = function (data, result) {
     db.query("DELETE FROM cartitem WHERE CartId =?", data.CartID, function (err) {
         if (err) {
-            throw err;
+            result (err.sqlMessage);
         }
         else
             result("Đã xoá thành công");
@@ -84,7 +84,7 @@ CartItem.update_info = function (data, result) {
     db.query("UPDATE cartitem SET FullName =?, Email =?, Phone=?, Avatar=? WHERE CartId =?",
         [data.FullName, data.Email, data.Phone, data.Avatar, data.CartID], function (err, cartitem) {
             if (err) {
-                throw err;
+                result (err.sqlMessage);
             }
             else
                 result({ id: cartitem.CartID, ...data });
