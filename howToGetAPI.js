@@ -12,8 +12,14 @@ class User {
     }
 };
 const api_url = "http://localhost:3000";
+var example_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7IlVzZXJJRCI6IkEwMSIsIlVzZXJOYW1lIjoiYWRtaW4iLCJQYXNzd29yZCI6ImFkbWluIiwiRnVsbE5hbWUiOiJhZG1pbiIsIkVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwiUGhvbmUiOiIwMTIzNDU2Nzg5IiwiQXZhdGFyIjoiIiwiUm9sZSI6MywiSXNBY3RpdmUiOjF9LCJpYXQiOjE2ODE2ODEwMTgsImV4cCI6MTcxMzIxNzAxOH0.1ifSa8ufMd-r0hrOQIsxp3CEhqWQHXcBQG3agMP_rp4";
 async function getApi(url){
-    const response = await fetch(url);
+    const response = await fetch(url, {
+        method: "GET",
+        headers: {
+            'Authorization': example_token
+        },
+    });
     var data = await response.json();
     console.log(data.result);
 }
@@ -36,6 +42,7 @@ async function postApi(url,user){
         method: "POST", // thay đổi method POST, PUT or DELETE
         headers: {
             "Content-Type": "application/json",
+            'Authorization': example_token
         },
         body: JSON.stringify(user),
     });
