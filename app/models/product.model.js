@@ -16,7 +16,7 @@ const Product = function (product) {
 Product.get_all = function (result) {
     db.query("SELECT * FROM product", function (err, product) {
         if (err)
-            throw err;
+            result (err.sqlMessage);
         else
             result(product);
     });
@@ -25,7 +25,7 @@ Product.get_all = function (result) {
 Product.getDetail = function (id, result) {
     db.query("SELECT * FROM product WHERE ProductId = ?", id, function (err, product) {
         if (err || product.length == 0)
-            throw err;
+            result (err.sqlMessage);
         else
             result(product[0]);
         // Trả về thông tin của một sản phẩm
@@ -35,7 +35,7 @@ Product.getDetail = function (id, result) {
 Product.getByCategoryId = function (id, result) {
     db.query("SELECT * FROM product WHERE CategoryId = ?", id, function (err, product) {
         if (err || product.length == 0)
-            throw err;
+            result (err.sqlMessage);
         else
         {
             result(product);
@@ -47,7 +47,7 @@ Product.getByCategoryId = function (id, result) {
 Product.create = function (data, result) {
     db.query("INSERT INTO product SET ?", data, function (err, product) {
         if (err) {
-            throw err;
+            result (err.sqlMessage);
         }
         else
             result({ id: product.productID,...data });
@@ -57,7 +57,7 @@ Product.create = function (data, result) {
 Product.detele = function (data, result) {
     db.query("DELETE FROM product WHERE ProductId =?", data.productID, function (err) {
         if (err) {
-            throw err;
+            result (err.sqlMessage);
         }
         else
             result("Đã xoá thành công");
@@ -68,7 +68,7 @@ Product.update_info = function (data, result) {
     db.query("UPDATE product SET ProductName =?, ProductSlug =?, ProductPrice=?, ProductUpdatedAt=? WHERE ProductId =?", 
     [data.ProductName,data.ProductSlug,data.ProductPrice,data.ProductUpdatedAt,data.ProductId], function (err, product) {
         if (err) {
-            throw err;
+            result (err.sqlMessage);
         }
         else
             result({ id: product.productID, ...data });

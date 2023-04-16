@@ -10,7 +10,7 @@ const Address = function (address) {
 Address.getByUserId = function (id, result) {
     db.query("SELECT * FROM address WHERE UserId = ?", id, function (err, address) {
         if (err || address.length == 0)
-            throw err;
+            result (err.sqlMessage);
         else
             result(address);
     });
@@ -19,7 +19,7 @@ Address.getByUserId = function (id, result) {
 Address.getDefaultAddressByUserID = function (id, result) {
     db.query("SELECT * FROM address WHERE Default = 1 AND  UserID = ?", id, function (err, address) {
         if (err || address.length == 0)
-            throw err;
+            result (err.sqlMessage);
         else
             result(address[0]);
     });
@@ -30,12 +30,12 @@ Address.create = function (data, result) {
     if (data.Default == 1)
         db.query("UPDATE address SET Default = 0 WHERE UserID=?", data.UserID, function (err) {
             if (err) {
-                throw err;
+                result (err.sqlMessage);
             }
         })
     db.query("INSERT INTO address SET ?", data, function (err, address) {
         if (err) {
-            throw err;
+            result (err.sqlMessage);
         }
         else
             result({ id: address.AddressID, ...data });
@@ -45,7 +45,7 @@ Address.create = function (data, result) {
 Address.detele = function (data, result) {
     db.query("DELETE FROM address WHERE AddressID =?", data.AddressID, function (err) {
         if (err) {
-            throw err;
+            result (err.sqlMessage);
         }
         else
             result("Đã xoá thành công");
@@ -56,7 +56,7 @@ Address.update_info = function (data, result) {
     db.query("UPDATE address SET AddressName =?, AddressPhone = ?, Default=? WHERE AddressID =?",
         [data.AddressName, data.AddressPhone, data.Default,data.AddressID], function (err, address) {
             if (err) {
-                throw err;
+                result (err.sqlMessage);
             }
             else
                 result({ id: address.AddressID, ...data });
