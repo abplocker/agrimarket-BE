@@ -1,11 +1,11 @@
-const jwt = require('jsonwebtoken');
-const token = require('./JWT');
+const jsonwebtoken = require('jsonwebtoken');
+const jwt = require('./JWT');
 // Create a token
 let createToken = function (user) {
     return new Promise(function (resolve, reject) {
-        jwt.sign({ data: user }, token.ACCESS_TOKEN,{
+        jsonwebtoken.sign({ data: user }, jwt.ACCESS_TOKEN,{
             algorithm: 'HS256',
-            expiresIn: token.ACCESS_TOKEN_LIFETIME,
+            expiresIn: jwt.ACCESS_TOKEN_LIFETIME,
         },
             function (err, newToken) {
                 if (err) {
@@ -18,9 +18,9 @@ let createToken = function (user) {
     });
 };
 
-let checkToken = function (data) {
+let checkToken = function (token) {
     return new Promise(function (resolve, reject) {
-        jwt.verify(data.token, token.ACCESS_TOKEN,
+        jsonwebtoken.verify(token, jwt.ACCESS_TOKEN,
             function (err, decoded) {
                 if (err) {
                     return reject(err);

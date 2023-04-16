@@ -4,6 +4,7 @@ var cors = require('cors');
 
 //Cấu hình body-parser
 var bodyParser = require('body-parser');
+const auth_middleware = require('./app/config/auth_middleware');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
@@ -12,7 +13,9 @@ app.use(cors());
 
 require('./app/routers/category_router')(app);
 require('./app/routers/product_router')(app);
-
+require('./app/routers/guest_router')(app);
+// Muốn vào phần user, cart ...  cần đăng nhập trước rồi hẳn tính
+app.use(auth_middleware.isAuth);
 require('./app/routers/user_router')(app);
 require('./app/routers/cart_router')(app);
 // // require('./app/routers/order_router')(app);
