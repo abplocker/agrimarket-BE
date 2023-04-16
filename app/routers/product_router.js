@@ -1,6 +1,6 @@
 module.exports = function (router) {
 
-	var productRouter = require('../controllers/product.controller');
+	var productRouter = require('../controllers/product_controller');
 
 	router.get('/product/all', productRouter.get_all);
 

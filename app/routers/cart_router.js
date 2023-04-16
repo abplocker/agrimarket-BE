@@ -1,6 +1,6 @@
 module.exports = function (router) {
 
-	var cartRouter = require('../controllers/cart.controller');
+	var cartRouter = require('../controllers/cart_controller');
 
 	router.get('/cart/:userID', cartRouter.getByUserId);
 

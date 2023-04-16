@@ -1,4 +1,4 @@
-var Category = require('../models/category.model');
+var Category = require('../models/category_model');
 exports.get_all = function (req, res) {
 	Category.get_all(function (data) {
 		res.send({ result: data });

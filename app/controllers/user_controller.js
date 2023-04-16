@@ -1,5 +1,5 @@
-var User = require('../models/user.model');
-var Address = require('../models/address.model');
+var User = require('../models/user_model');
+var Address = require('../models/address_model');
 
 exports.get_all = function (req, res) {
 	User.get_all(function (data) {

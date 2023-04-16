@@ -1,6 +1,6 @@
 module.exports = function (router) {
 
-	var userController = require('../controllers/user.controller');
+	var userController = require('../controllers/user_controller');
 
 	var JWT = require('../config/security');
 

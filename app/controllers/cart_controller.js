@@ -1,4 +1,4 @@
-var Cart = require('../models/cart.model');
+var Cart = require('../models/cart_model');
 
 exports.getByUserId = function (req, res) {
 	Cart.getByUserId(req.params.userID, function (data) {

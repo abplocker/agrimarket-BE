@@ -1,5 +1,5 @@
-var Product = require('../models/product.model');
-var Image = require('../models/image.model');
+var Product = require('../models/product_model');
+var Image = require('../models/image_model');
 
 exports.get_all = function (req, res) {
 	Product.get_all(function (data) {

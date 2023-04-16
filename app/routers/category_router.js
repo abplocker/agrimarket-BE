@@ -1,6 +1,6 @@
 module.exports = function (router) {
 
-	var categoryRouter = require('../controllers/category.controller');
+	var categoryRouter = require('../controllers/category_controller');
 
 	router.get('/category/all', categoryRouter.get_all);
 

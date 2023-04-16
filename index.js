@@ -10,12 +10,12 @@ app.use(cors());
 // Các routers
 // Sắp xếp theo thứ tự
 
-require('./app/routers/category.router')(app);
-require('./app/routers/product.router')(app);
+require('./app/routers/category_router')(app);
+require('./app/routers/product_router')(app);
 
-require('./app/routers/user.router')(app);
-require('./app/routers/cart.router')(app);
-// // require('./app/routers/order.router')(app);
+require('./app/routers/user_router')(app);
+require('./app/routers/cart_router')(app);
+// // require('./app/routers/order_router')(app);
 
 app.listen(3000, function () {
 	console.log("Server listening on http://localhost:3000");
