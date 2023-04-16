@@ -3,7 +3,6 @@ let isAuth = async function(req, res, next) {
     var token = req.headers.authorization;
     if (token) {
         try {
-            console.log(token);
             var authData = await jwt.checkToken(token);
             req.auth = authData;
             next();
