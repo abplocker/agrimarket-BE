@@ -1,4 +1,4 @@
-const db = require('../mysql');
+const db = require('../config/mysql');
 const CartItem = function (cartitem) {
     this.CartItemId = cartitem.CartItemId;
     this.UserId = cartitem.UserId;

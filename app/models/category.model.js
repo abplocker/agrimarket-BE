@@ -1,4 +1,4 @@
-const db = require('../mysql');
+const db = require('../config/mysql');
 const Category = function (category) {
     this.CategoryId = category.CategoryId;
     this.CategoryName = category.CategoryName;

@@ -1,4 +1,4 @@
-const db = require('../mysql');
+const db = require('../config/mysql');
 const Image = function (image) {
     this.ImageId = image.ImageId;
     this.ProductId = image.ProductId;

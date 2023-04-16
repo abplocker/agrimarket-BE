@@ -1,4 +1,4 @@
-const db = require('../mysql');
+const db = require('../config/mysql');
 const Product = function (product) {
     this.ProductId = product.ProductId;
     this.ProductName = product.ProductName;
