@@ -46,7 +46,8 @@ exports.update_info = function (req,res){
     });
 }
 exports.search = function (req, res) {
-  Product.search(req.body, function (data) {
+  const searchData = req.query.ProductName;
+  Product.search(searchData, function (data) {
         res.send({ result: data });
     });
 }

@@ -76,9 +76,9 @@ Product.update_info = function (data, result) {
     });
 }
 
-Product.search = function (data, result) {
+Product.search = function (productName, result) {
     db.query("SELECT * FROM product  WHERE ProductName LIKE?", 
-    ["%" + data.ProductName + "%"], function (err, product) {
+    ["%" + productName + "%"], function (err, product) {
         if (err || product.length == 0) {
             result (product.sqlMessage);
         }
