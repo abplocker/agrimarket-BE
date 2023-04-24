@@ -45,5 +45,9 @@ exports.update_info = function (req,res){
         res.send({ result: data });
     });
 }
-
+exports.search = function (req, res) {
+  Product.search(req.body, function (data) {
+        res.send({ result: data });
+    });
+}
 

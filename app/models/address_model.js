@@ -10,7 +10,7 @@ const Address = function (address) {
 Address.getByUserId = function (id, result) {
     db.query("SELECT * FROM address WHERE UserId = ?", id, function (err, address) {
         if (err || address.length == 0)
-            result (err.sqlMessage);
+            result (err);
         else
             result(address);
     });
@@ -19,7 +19,7 @@ Address.getByUserId = function (id, result) {
 Address.getDefaultAddressByUserID = function (id, result) {
     db.query("SELECT * FROM address WHERE Default = 1 AND  UserID = ?", id, function (err, address) {
         if (err || address.length == 0)
-            result (err.sqlMessage);
+            result (err);
         else
             result(address[0]);
     });

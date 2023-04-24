@@ -6,11 +6,13 @@ module.exports = function (router) {
 
 	router.get('/product/category/:id', productRouter.getByCategoryId);
 
-    router.get('/product/:id', productRouter.getDetail);
+    router.get('/product/detail/:id', productRouter.getDetail);
 
 	router.post('/product/add', productRouter.create);
 
 	router.delete('/product/remove', productRouter.remove);
 
 	router.put('/product/update_info',productRouter.update_info);
+
+	router.get('/product/search', productRouter.search);
 };

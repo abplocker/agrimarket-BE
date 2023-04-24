@@ -1,5 +1,6 @@
 module.exports = function (router) {
 	var JWT = require('../config/security');
+	var userController = require('../controllers/user_controller');
 // Test jwt
 	router.get('/token', async function (req, res){
 		const token = await JWT.createToken(req.body);
@@ -14,4 +15,9 @@ module.exports = function (router) {
             res.send({error: error})
         }
 	});
+
+	router.get('/login',userController.login);
+
+	router.post('/register', userController.createUser);
+
 };

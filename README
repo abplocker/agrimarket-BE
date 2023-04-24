@@ -4,4 +4,5 @@ npm install express --save
 npm i --save body-parser
 npm install mysql2 --save
 Đầu tiên chạy npm install
+Cập nhật cấu hình mysql trong config
 Sau đó chạy node index

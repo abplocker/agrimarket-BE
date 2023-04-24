@@ -17,15 +17,16 @@ Product.get_all = function (result) {
     db.query("SELECT * FROM product", function (err, product) {
         if (err)
             result (err.sqlMessage);
-        else
+        else{
             result(product);
+        }
     });
 }
 // View product details
 Product.getDetail = function (id, result) {
     db.query("SELECT * FROM product WHERE ProductId = ?", id, function (err, product) {
         if (err || product.length == 0)
-            result (err.sqlMessage);
+            result (product.sqlMessage);
         else
             result(product[0]);
         // Trả về thông tin của một sản phẩm
@@ -72,6 +73,17 @@ Product.update_info = function (data, result) {
         }
         else
             result({ id: product.productID, ...data });
+    });
+}
+
+Product.search = function (data, result) {
+    db.query("SELECT * FROM product  WHERE ProductName LIKE?", 
+    ["%" + data.ProductName + "%"], function (err, product) {
+        if (err || product.length == 0) {
+            result (product.sqlMessage);
+        }
+        else
+            result(product);
     });
 }
 module.exports = Product;

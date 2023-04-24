@@ -9,8 +9,10 @@ const CartItem = function (cartitem) {
 
 CartItem.getByUserId = function (id, result) {
     db.query("SELECT * FROM cartitem WHERE UserId = ?", id, function (err, cartitem) {
-        if (err || cartitem.length == 0)
-            result (err.sqlMessage);
+        if (err || cartitem.length == 0){
+            console.log(err);
+            result (err);
+        }
         else
             result(cartitem);
     });
@@ -61,8 +63,8 @@ CartItem.changeQuantity = function (data, result) {
     db.query("UPDATE cartitem SET Quantity =? WHERE CartItemID =?"
         , [data.ChangeAmount,data.CartID]
         , function (err, cartitem) {
-            if (err) {
-                result (err.sqlMessage);
+            if (err,cartitem.affectedRows == 0) {
+                result(null);
             }
             else
                 result({ id: cartitem.CartID, ...data });

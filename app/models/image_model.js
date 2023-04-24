@@ -19,7 +19,7 @@ Image.get_all = function (result) {
 Image.getByProductId = function (id, result) {
     db.query("SELECT * FROM image WHERE ProductId = ?", id, function (err, image) {
         if (err || image.length == 0)
-            result (err.sqlMessage);
+            result (image.sqlMessage);
         else
             result(image);
         // Chỉ cần trả về mảng các Image
