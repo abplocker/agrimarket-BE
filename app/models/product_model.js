@@ -1,6 +1,6 @@
 const db = require('../config/mysql');
 const Product = function (product) {
-    this.ProductId = product.ProductId;
+    this.ProductID = product.ProductId;
     this.ProductName = product.ProductName;
     this.ProdcutPrice = product.ProdcutPrice;
     this.ProductDescription = product.ProductDescription;
@@ -9,8 +9,8 @@ const Product = function (product) {
     this.ProductQuantity = product.ProductQuantity;
     this.ProductCreatedAt = product.ProductCreatedAt;
     this.ProductUpdatedAt = product.ProductUpdatedAt;
-    this.CategoryId = product.CategoryId;
-    this.UserId = product.UserId;
+    this.CategoryID = product.CategoryId;
+    this.UserID = product.UserId;
 }
 
 Product.get_all = function (result) {
@@ -46,6 +46,7 @@ Product.getByCategoryId = function (id, result) {
 }
 
 Product.create = function (data, result) {
+    console.log(data.UserID)
     db.query("INSERT INTO product SET ?", data, function (err, product) {
         if (err) {
             result (err.sqlMessage);
@@ -66,10 +67,10 @@ Product.detele = function (data, result) {
 }
 
 Product.update_info = function (data, result) {
-    db.query("UPDATE product SET ProductName =?, ProductSlug =?, ProductPrice=?, ProductUpdatedAt=? WHERE ProductId =?", 
-    [data.ProductName,data.ProductSlug,data.ProductPrice,data.ProductUpdatedAt,data.ProductId], function (err, product) {
-        if (err) {
-            result (err.sqlMessage);
+    db.query("UPDATE product SET ? WHERE ProductID =? AND UserID =?", 
+    [data,data.ProductID,data.UserID], function (err, product) {
+        if (err || product.affectedRows == 0) {
+            result (null);
         }
         else
             result({ id: product.productID, ...data });

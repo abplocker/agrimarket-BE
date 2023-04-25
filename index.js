@@ -13,6 +13,7 @@ app.use(cors());
 
 require('./app/routers/category_router')(app);
 require('./app/routers/product_router')(app);
+require('./app/routers/post_router')(app);
 require('./app/routers/guest_router')(app);
 app.use(auth_middleware.isAuth);
 // Token hợp lệ, mới chạy vào các router sau

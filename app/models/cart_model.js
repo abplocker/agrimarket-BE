@@ -1,6 +1,6 @@
 const db = require('../config/mysql');
 const CartItem = function (cartitem) {
-    this.CartItemId = cartitem.CartItemId;
+    this.CartItemID = cartitem.CartItemID;
     this.UserId = cartitem.UserId;
     this.ProductId = cartitem.ProductId;
     this.Quantity = cartitem.Quantity;
@@ -61,36 +61,44 @@ CartItem.addOneCartItem = function (data, result) {
 
 CartItem.changeQuantity = function (data, result) {
     db.query("UPDATE cartitem SET Quantity =? WHERE CartItemID =?"
-        , [data.ChangeAmount,data.CartID]
+        , [data.ChangeAmount,data.CartItemID]
         , function (err, cartitem) {
-            if (err,cartitem.affectedRows == 0) {
-                result(null);
+            if (err || cartitem.affectedRows == 0) {
+                result(cartitem);
             }
             else
-                result({ id: cartitem.CartID, ...data });
+                result({ id: cartitem.CartItemID, ...data });
         });
 }
 
-
 CartItem.detele = function (data, result) {
-    db.query("DELETE FROM cartitem WHERE CartId =?", data.CartID, function (err) {
-        if (err) {
-            result (err.sqlMessage);
+    db.query("DELETE FROM cartitem WHERE CartItemID =?", data.CartItemID, function (err,cartitem) {
+        if (err || cartitem.affectedRows == 0) {
+            result(null);
         }
         else
             result("Đã xoá thành công");
     });
 }
 
-CartItem.update_info = function (data, result) {
-    db.query("UPDATE cartitem SET FullName =?, Email =?, Phone=?, Avatar=? WHERE CartId =?",
-        [data.FullName, data.Email, data.Phone, data.Avatar, data.CartID], function (err, cartitem) {
-            if (err) {
-                result (err.sqlMessage);
-            }
-            else
-                result({ id: cartitem.CartID, ...data });
-        });
-}
-
+// CartItem.update_info = function (data, result) {
+//     db.query("UPDATE cartitem SET FullName =?, Email =?, Phone=?, Avatar=? WHERE CartId =?",
+//         [data.FullName, data.Email, data.Phone, data.Avatar, data.CartID], function (err, cartitem) {
+//             if (err) {
+//                 result (err.sqlMessage);
+//             }
+//             else
+//                 result({ id: cartitem.CartID, ...data });
+//         });
+// }
+// CartItem.checkUser = function(data,result){
+//     db.query("SELECT * FROM cartitem WHERE UserId = ?", id, function (err, cartitem) {
+//         if (err || cartitem.length == 0){
+//             console.log(err);
+//             result (err);
+//         }
+//         else
+//             result(cartitem);
+//     });
+// }
 module.exports = CartItem;

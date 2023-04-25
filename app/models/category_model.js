@@ -23,7 +23,7 @@ Category.get_all = function (result) {
 Category.create = function (data, result) {
     db.query("INSERT INTO category SET ?", data, function (err, category) {
         if (err) {
-            result (err.sqlMessage);
+            result (err);
         }
         else
             result({ id: category.CategoryID,...data });

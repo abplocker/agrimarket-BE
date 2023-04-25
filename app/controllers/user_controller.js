@@ -1,6 +1,7 @@
 var User = require('../models/user_model');
 var Address = require('../models/address_model');
 var JWT = require('../config/security');
+
 exports.get_all = function (req, res) {
 	User.get_all(function (data) {
 		res.send({ result: data });
@@ -47,17 +48,27 @@ exports.remove = function (req, res) {
 }
 exports.update_info = function (req, res) {
 	User.update_info(req.body, function (data) {
-		res.send({ result: data });
+		if (data)
+			res.send({ result: data });
+		else
+			res.status(401).send({ message: 'Update failed' });
 	});
 }
 exports.login = function (req, res) {
-	User.check_login(req.body, async function (user) {
+	User.findById(req.body, async function (user) {
 		if (user) {
-			const token = await JWT.createToken(user)
-			res.send(token);
+			User.check_login(req.body, async function (user) {
+				if (user) {
+					const token = await JWT.createToken(user)
+					res.send(token);
+				}
+				else {
+					res.status(401).send({ message: 'Login failed' });
+				}
+			});
 		}
 		else {
-			res.status(401).send({ message: 'Login failed' });
+			res.status(401).send({ message: 'User not registered' });
 		}
-	});
+	})
 }

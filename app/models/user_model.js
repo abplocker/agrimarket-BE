@@ -43,7 +43,7 @@ User.create = function (data, result) {
 User.detele = function (data, result) {
     db.query("DELETE FROM users WHERE UserId =?", data.UserID, function (err) {
         if (err) {
-            result(err.sqlMessage);
+            result(err);
         }
         else
             result("Đã xoá thành công");
@@ -53,8 +53,8 @@ User.detele = function (data, result) {
 User.update_info = function (data, result) {
     db.query("UPDATE users SET FullName =?, Email = ?, Phone=?, Avatar=? WHERE UserId =?",
         [data.FullName, data.Email, data.Phone, data.Avatar, data.UserID], function (err, user) {
-            if (err) {
-                result(err.sqlMessage);
+            if (err || user.changedRows == 0) {
+                result(null);
             }
             else
                 result({ id: user.UserID, ...data });
@@ -71,5 +71,16 @@ User.check_login = function (data, result) {
             else
                 result(user[0]);
         });
+}
+User.findById = function (data,result){
+    db.query("SELECT * FROM users WHERE UserName =?",
+    [data.UserName], function (err, user) {
+        if (err || user.length == 0){
+            console.log(err);
+            result(null);
+        }
+        else
+            result(user[0]);
+    });
 }
 module.exports = User;

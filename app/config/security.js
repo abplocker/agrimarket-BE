@@ -17,7 +17,7 @@ let createToken = function (user) {
         );
     });
 };
-
+// return user
 let checkToken = function (token) {
     return new Promise(function (resolve, reject) {
         jsonwebtoken.verify(token, jwt.ACCESS_TOKEN,
