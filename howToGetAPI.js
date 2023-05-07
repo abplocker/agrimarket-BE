@@ -11,6 +11,7 @@ class User {
         this.IsActive = IsActive;
     }
 };
+
 const api_url = "http://localhost:3000";
 var example_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7IlVzZXJJRCI6IkEwMSIsIlVzZXJOYW1lIjoiYWRtaW4iLCJQYXNzd29yZCI6ImFkbWluIiwiRnVsbE5hbWUiOiJhZG1pbiIsIkVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwiUGhvbmUiOiIwMTIzNDU2Nzg5IiwiQXZhdGFyIjoiIiwiUm9sZSI6MywiSXNBY3RpdmUiOjF9LCJpYXQiOjE2ODE2ODEwMTgsImV4cCI6MTcxMzIxNzAxOH0.1ifSa8ufMd-r0hrOQIsxp3CEhqWQHXcBQG3agMP_rp4";
 async function getApi(url){
@@ -23,6 +24,7 @@ async function getApi(url){
     var data = await response.json();
     console.log(data.result);
 }
+
 getApi(api_url+"/user/all");
 const user = new User("00412123","string 65", "string 65", "string 65", "", "", "", "1", "1",);
 const user1 = ({
@@ -36,6 +38,7 @@ const user1 = ({
     Role: "1",
     IsActive: "1",
 });
+
 // thêm user
 async function postApi(url,user){
     const response = await fetch(url, {
@@ -49,5 +52,6 @@ async function postApi(url,user){
     var data = await response.json();
     console.log(data.result);
 }
+
 // postApi(api_url+"/user/add",user);
 postApi(api_url+"/user/add",user1);
