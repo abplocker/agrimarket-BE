@@ -5,4 +5,5 @@ npm i --save body-parser
 npm install mysql2 --save
 Đầu tiên chạy npm install
 Cập nhật cấu hình mysql trong config
+Xoá db trong mysql rồi chạy  db_agrimarket.sql trong database
 Sau đó chạy node index
