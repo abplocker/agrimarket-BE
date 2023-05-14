@@ -3,7 +3,7 @@ var JWT = require('../config/security');
 
 exports.getByUserId = function (req, res) {
     var token = req.get("Authorization");
-    JWT.checkToken(token)
+    JWT.checkAccessToken(token)
         .then(result => {
             Cart.getByUserId(result.data.UserID, function (data) {
                 res.send({ result: data });

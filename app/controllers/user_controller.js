@@ -55,20 +55,21 @@ exports.update_info = function (req, res) {
 	});
 }
 exports.login = function (req, res) {
-	User.findById(req.body, async function (user) {
+	User.findById(req.headers, async function (user) {
 		if (user) {
-			User.check_login(req.body, async function (user) {
+			User.check_login(req.headers, async function (user) {
 				if (user) {
-					const token = await JWT.createToken(user)
-					res.send(token);
+					const accessToken = await JWT.createAccessToken(user)
+					const refreshToken = await JWT.createRefreshToken(user)
+					res.send({ accessToken: accessToken, refreshToken:refreshToken});
 				}
 				else {
-					res.status(401).send({ message: 'Login failed' });
+					res.status(401).send({ message: 'Sai mật khẩu' });
 				}
 			});
 		}
 		else {
-			res.status(401).send({ message: 'User not registered' });
+			res.status(401).send({ message: 'Tài khoản không tồn tại' });
 		}
 	})
 }

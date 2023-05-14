@@ -1,8 +1,10 @@
 const ACCESS_TOKEN = "Jd)Ysg?&z9$,4T";
-const REFRESH_TOKEN = "gvGcA1DkIYor6tVQML7hXEUma0Ru5sWpbxBw2P9ZdJTOC4yK3z8jHNinSqelFf";
-const ACCESS_TOKEN_LIFETIME = 365 * 24 * 60 * 60; // temporary set lifetime 1 year for testing
+const REFRESH_TOKEN = "gvGcA1DkIYor6t";
+const ACCESS_TOKEN_LIFETIME =  1;
+const REFRESH_TOKEN_LIFETIME = 365 * 24 * 60 * 60; // temporary set lifetime 1 year for testing
 module.exports = {
     ACCESS_TOKEN : ACCESS_TOKEN,
     ACCESS_TOKEN_LIFETIME : ACCESS_TOKEN_LIFETIME,
-    REFRESH_TOKEN: REFRESH_TOKEN
+    REFRESH_TOKEN: REFRESH_TOKEN,
+    REFRESH_TOKEN_LIFETIME : REFRESH_TOKEN_LIFETIME,
 }

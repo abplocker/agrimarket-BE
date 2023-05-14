@@ -1,14 +1,14 @@
 const db = require('../config/mysql');
 const CartItem = function (cartitem) {
     this.CartItemID = cartitem.CartItemID;
-    this.UserId = cartitem.UserId;
+    this.UserID = cartitem.UserID;
     this.ProductId = cartitem.ProductId;
     this.Quantity = cartitem.Quantity;
     this.SumPrice = cartitem.SumPrice;
 }
 
 CartItem.getByUserId = function (id, result) {
-    db.query("SELECT * FROM cartitem WHERE UserId = ?", id, function (err, cartitem) {
+    db.query("SELECT * FROM cartitem WHERE UserID = ?", id, function (err, cartitem) {
         if (err || cartitem.length == 0){
             console.log(err);
             result (err);
@@ -92,7 +92,7 @@ CartItem.detele = function (data, result) {
 //         });
 // }
 // CartItem.checkUser = function(data,result){
-//     db.query("SELECT * FROM cartitem WHERE UserId = ?", id, function (err, cartitem) {
+//     db.query("SELECT * FROM cartitem WHERE UserID = ?", id, function (err, cartitem) {
 //         if (err || cartitem.length == 0){
 //             console.log(err);
 //             result (err);

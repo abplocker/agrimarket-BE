@@ -7,7 +7,7 @@ const Category = function (category) {
     this.CategoryActive = category.CategoryActive;
     this.CategoryCreatedAt = category.CategoryCreatedAt;
     this.CategoryUpdatedAt = category.CategoryUpdatedAt;
-    this.UserId = category.UserId;
+    this.UserID = category.UserID;
 }
 
 Category.get_all = function (result) {

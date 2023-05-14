@@ -1,6 +1,6 @@
 class User { // comment
-    constructor(UserId, UserName, Password, FullName, Email, Phone, Avatar, Role, IsActive){
-        this.UserId = UserId;
+    constructor(UserID, UserName, Password, FullName, Email, Phone, Avatar, Role, IsActive){
+        this.UserID = UserID;
         this.UserName = UserName;
         this.Password = Password;
         this.FullName = FullName;
@@ -28,7 +28,7 @@ async function getApi(url){
 getApi(api_url + "/user/all");                         // comment
 const user = new User("00412123", "string 65", "string 65", "string 65", "", "", "", "1", "1",);
 const user1 = ({
-    UserId: "user", 
+    UserID: "user", 
     UserName: "user1", 
     Password: "string 65", 
     FullName: "string 65", 

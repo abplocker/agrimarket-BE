@@ -10,7 +10,7 @@ const Product = function (product) {
     this.ProductCreatedAt = product.ProductCreatedAt;
     this.ProductUpdatedAt = product.ProductUpdatedAt;
     this.CategoryID = product.CategoryId;
-    this.UserID = product.UserId;
+    this.UserID = product.UserID;
 }
 
 Product.get_all = function (result) {

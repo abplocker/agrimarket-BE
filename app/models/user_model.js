@@ -1,6 +1,6 @@
 const db = require('../config/mysql');
 const User = function (user) {
-    this.UserId = user.UserId;
+    this.UserID = user.UserID;
     this.UserName = user.UserName;
     this.Password = user.Password;
     this.FullName = user.FullName;
@@ -21,7 +21,7 @@ User.get_all = function (result) {
 }
 
 User.getById = function (id, result) {
-    db.query("SELECT * FROM users WHERE UserId = ?", id, function (err, user) {
+    db.query("SELECT * FROM users WHERE UserID = ?", id, function (err, user) {
         if (err || user.length == 0)
             result (err);
         else
@@ -41,7 +41,7 @@ User.create = function (data, result) {
 }
 
 User.detele = function (data, result) {
-    db.query("DELETE FROM users WHERE UserId =?", data.UserID, function (err) {
+    db.query("DELETE FROM users WHERE UserID =?", data.UserID, function (err) {
         if (err) {
             result(err);
         }
@@ -51,7 +51,7 @@ User.detele = function (data, result) {
 }
 
 User.update_info = function (data, result) {
-    db.query("UPDATE users SET FullName =?, Email = ?, Phone=?, Avatar=? WHERE UserId =?",
+    db.query("UPDATE users SET FullName =?, Email = ?, Phone=?, Avatar=? WHERE UserID =?",
         [data.FullName, data.Email, data.Phone, data.Avatar, data.UserID], function (err, user) {
             if (err || user.changedRows == 0) {
                 result(null);
@@ -63,7 +63,7 @@ User.update_info = function (data, result) {
 
 User.check_login = function (data, result) {
     db.query("SELECT * FROM users WHERE UserName =? AND Password =?",
-        [data.UserName, data.Password], function (err, user) {
+        [data.username, data.password], function (err, user) {
             if (err || user.length == 0){
                 console.log(err);
                 result(null);
@@ -74,7 +74,7 @@ User.check_login = function (data, result) {
 }
 User.findById = function (data,result){
     db.query("SELECT * FROM users WHERE UserName =?",
-    [data.UserName], function (err, user) {
+    [data.username], function (err, user) {
         if (err || user.length == 0){
             console.log(err);
             result(null);

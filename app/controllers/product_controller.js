@@ -32,7 +32,7 @@ exports.getDetail = async function (req, res) {
 
 exports.create = function (req, res) {
   var token = req.get("Authorization");
-  JWT.checkToken(token)
+  JWT.checkAccessToken(token)
     .then(result => {
       if (result.data.UserID == req.body.UserID && result.data.Role == 2)
         Product.create(req.body, function (data) {
@@ -51,7 +51,7 @@ exports.remove = function (req, res) {
 
 exports.update_info = function (req, res) {
   var token = req.get("Authorization");
-  JWT.checkToken(token)
+  JWT.checkAccessToken(token)
     .then(result => {
       if (result.data.UserID == req.body.UserID && result.data.Role == 2)
         Product.update_info(req.body, function (data) {

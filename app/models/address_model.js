@@ -8,7 +8,7 @@ const Address = function (address) {
 }
 
 Address.getByUserId = function (id, result) {
-    db.query("SELECT * FROM address WHERE UserId = ?", id, function (err, address) {
+    db.query("SELECT * FROM address WHERE UserID = ?", id, function (err, address) {
         if (err || address.length == 0)
             result (err);
         else
