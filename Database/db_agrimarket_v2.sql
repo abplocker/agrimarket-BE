@@ -281,7 +281,9 @@ CREATE TABLE `users` (
   `Avatar` varchar(50) NOT NULL DEFAULT (_utf8mb4''),
   `Role` int NOT NULL DEFAULT (1),
   `IsActive` int NOT NULL DEFAULT (1),
-  PRIMARY KEY (`UserID`)
+  `RefreshToken` text,
+  PRIMARY KEY (`UserID`),
+  UNIQUE KEY `UserName_UNIQUE` (`UserName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -291,7 +293,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('A01','admin','admin','admin','admin@gmail.com','0123456789','',3,1),('S01','sell','sell','sell','sell@gmail.com','08654852462','',2,1),('S02','sell2','sell2','sell','sell2@gmail.com','0523452542','',2,1),('S03','sell3','sell3','sell','sell3@gmail.com','0274525845','',2,1),('S04','sell4','sell4','sell','sell4@gmail.com','0956842357','',2,1),('S05','sell5','sell5','sell','sell5@gmail.com','0512369756','',2,1),('U0013','string10','string10','User 03','string3','string4','string5',1,1);
+INSERT INTO `users` VALUES ('A01','admin','admin','admin','admin@gmail.com','0123456789','',3,1,NULL),('S01','sell','sell','sell','sell@gmail.com','08654852462','',2,1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7IlVzZXJJRCI6IlMwMSIsIlVzZXJOYW1lIjoic2VsbCIsIlJvbGUiOjJ9LCJpYXQiOjE2ODQxODQyMjAsImV4cCI6MTcxNTcyMDIyMH0._xKwurokXvS32mxP57s1vFApYzCqDX1_uiKmPfAm8zw'),('S02','sell2','sell2','sell','sell2@gmail.com','0523452542','',2,1,NULL),('S03','sell3','sell3','sell','sell3@gmail.com','0274525845','',2,1,NULL),('S04','sell4','sell4','sell','sell4@gmail.com','0956842357','',2,1,NULL),('S05','sell5','sell5','sell','sell5@gmail.com','0512369756','',2,1,NULL),('U1','string10','string10','User 03','string3','string4','string5',1,1,NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -304,4 +306,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-09  9:22:45
+-- Dump completed on 2023-05-16  4:00:03
