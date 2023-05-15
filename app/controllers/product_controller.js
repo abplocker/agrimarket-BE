@@ -24,7 +24,11 @@ exports.getDetail = async function (req, res) {
         Image.getByProductId(req.params.id, resolve);
       })
     ]);
-    res.send({ product: product, images: images });
+    if (product == null) {
+      res.status(404).send()
+    }
+    else
+      res.send({ product: product, images: images });
   } catch (err) {
     res.status(500).send({ error: err });
   }

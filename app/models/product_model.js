@@ -26,7 +26,7 @@ Product.get_all = function (result) {
 Product.getDetail = function (id, result) {
     db.query("SELECT * FROM product WHERE ProductId = ?", id, function (err, product) {
         if (err || product.length == 0)
-            result (product.sqlMessage);
+            result (null);
         else
             result(product[0]);
         // Trả về thông tin của một sản phẩm
