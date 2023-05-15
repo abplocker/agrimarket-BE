@@ -26,7 +26,6 @@ module.exports = function (router) {
 		try {
 		const check = await JWT.checkRefreshToken(req.headers.authorization);
 		res.send(check)
-		console.log(check);
 		} catch (error) {
             res.status(401).send(error)
         }

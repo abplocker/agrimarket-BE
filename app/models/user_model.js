@@ -62,7 +62,7 @@ User.update_info = function (data, result) {
 }
 
 User.check_login = function (data, result) {
-    db.query("SELECT * FROM users WHERE UserName =? AND Password =?",
+    db.query("SELECT UserID, UserName, Role FROM users WHERE UserName =? AND Password =?",
         [data.username, data.password], function (err, user) {
             if (err || user.length == 0){
                 console.log(err);
