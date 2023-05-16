@@ -59,9 +59,9 @@ let checkRefreshToken = function (token) {
                 if (err) {
                     return reject(err);
                 } else {
-                    db.query("SELECT * FROM users WHERE UserID = ? AND RefreshToken=?", [decoded.data.UserID,token], function (err, user) {
-                        if (err || user.length == 0){
-                            db.query("UPDATE users SET RefreshToken = NULL WHERE UserID =?",[decoded.data.UserID])
+                    db.query("SELECT * FROM users WHERE UserID = ? AND RefreshToken=?", [decoded.data.UserID, token], function (err, user) {
+                        if (err || user.length == 0) {
+                            db.query("UPDATE users SET RefreshToken = NULL WHERE UserID =?", [decoded.data.UserID])
                             return reject("Không tồn tại refresh token trong database, vui lòng đăng nhập lại")
                         }
                         else
@@ -74,9 +74,13 @@ let checkRefreshToken = function (token) {
 };
 //////////////////////////////////////////////////////////
 let refreshAccessToken = async function (refreshToken) {
-    const user = await checkRefreshToken(refreshToken);
-    const accessToken = createAccessToken(user);
-    return accessToken;
+    try {
+        user = await checkRefreshToken(refreshToken);
+        const accessToken = await createAccessToken(user);
+        return accessToken;
+    } catch (error) {
+        return null
+    }
 }
 
 
@@ -85,5 +89,5 @@ module.exports = {
     refreshAccessToken: refreshAccessToken,
     createRefreshToken: createRefreshToken,
     checkAccessToken: checkAccessToken,
-    checkRefreshToken:checkRefreshToken,
+    checkRefreshToken: checkRefreshToken,
 }
