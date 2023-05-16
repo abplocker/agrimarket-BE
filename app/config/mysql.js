@@ -6,6 +6,7 @@ var connectionMySql = mysql.createConnection({
     password: "quangthien",
     database: "agrimarket"
 });
+
 connectionMySql.connect(function (err) {
     if (err) throw err;
 });
