@@ -14,7 +14,7 @@ module.exports = function (router) {
 		const token = await JWT.refreshAccessToken(req.headers.authorization);
 		res.send({token: token})
 	});
-	router.get('/check_access_token', async function (req, res){
+	router.get('/authentication', async function (req, res){
 		try {
 		const check = await JWT.checkAccessToken(req.headers.authorization);
 		res.send(check)
