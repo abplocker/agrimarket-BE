@@ -1,6 +1,6 @@
 var Cart = require('../models/cart_model');
 var JWT = require('../config/security');
-
+///////////////////////////////////////////
 exports.getByUserId = function (req, res) {
     var token = req.get("Authorization");
     JWT.checkAccessToken(token)
@@ -10,7 +10,7 @@ exports.getByUserId = function (req, res) {
             });
         });
 }
-
+//////////////////////////////////////////////
 exports.addCartItem = function (req, res) {
     Cart.addCartItem(req.body, function (data) {
         res.send({ result: data });

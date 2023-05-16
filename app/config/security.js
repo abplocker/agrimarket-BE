@@ -19,7 +19,7 @@ let createAccessToken = function (user) {
         );
     });
 };
-
+//////////////////////////////////////////////////////
 let checkAccessToken = function (token) {
     return new Promise(function (resolve, reject) {
         jsonwebtoken.verify(token, jwt.ACCESS_TOKEN,
@@ -33,7 +33,7 @@ let checkAccessToken = function (token) {
         );
     });
 };
-
+////////////////////////////////////////////////////
 let createRefreshToken = function (user) {
     return new Promise(function (resolve, reject) {
         jsonwebtoken.sign({ data: user }, jwt.REFRESH_TOKEN, {
@@ -51,6 +51,7 @@ let createRefreshToken = function (user) {
         );
     });
 };
+/////////////////////////////////////////////
 let checkRefreshToken = function (token) {
     return new Promise(function (resolve, reject) {
         jsonwebtoken.verify(token, jwt.REFRESH_TOKEN,
@@ -71,6 +72,7 @@ let checkRefreshToken = function (token) {
         );
     });
 };
+//////////////////////////////////////////////////////////
 let refreshAccessToken = async function (refreshToken) {
     const user = await checkRefreshToken(refreshToken);
     const accessToken = createAccessToken(user);

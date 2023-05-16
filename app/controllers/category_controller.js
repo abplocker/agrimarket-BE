@@ -5,17 +5,24 @@ exports.get_all = function (req, res) {
 	});
 }
 
+//
+
 exports.create = function (req, res) {
 	Category.create(req.body, function (data) {
         res.send({ result: data });
     });
 }
 
+//
+
 exports.remove = function (req, res) {
 	Category.detele(req.body, function (data) {
 		res.send({ result: data });
 	});
 }
+
+//
+
 exports.update_info = function (req,res){
 	Category.update_info(req.body, function (data) {
         res.send({ result: data });
