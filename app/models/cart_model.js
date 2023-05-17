@@ -13,8 +13,50 @@ CartItem.getByUserId = function (id, result) {
             console.log(err);
             result (err);
         }
-        else
+        else{
+            console.log(cartitem)
             result(cartitem);
+        }
+    });
+}
+// Lấy thông tin cart tạm thời của user
+CartItem.getCartDrawerContainer = function (id, result) {
+    db.query("SELECT ProductID FROM cartitem WHERE UserID = ?", id, function (err, cartitems) {
+        if (err || cartitems.length == 0) {
+            console.log(err);
+            result(err);
+        } else {
+            // Lấy danh sách ProductID từ kết quả truy vấn cartitem
+            const productIDs = cartitems.map(item => item.ProductID); // Tại cái mảng này là đối tượng, mình thì cần lấy cái ID là được gòi, làm màu tí, { ProductID: 'P01' }
+            // console.log("cartitems",cartitems);
+            // console.log("productIDs",productIDs);
+
+            // Tạo một mảng để lưu trữ kết quả cuối cùng
+            const products = [];
+
+            // Sử dụng vòng lặp để truy vấn thông tin chi tiết cho từng ProductID
+            productIDs.forEach(function (productID, index) {
+                db.query("SELECT * FROM product WHERE ProductID = ?", productID, function (err, product) {
+                    if (err || product.length == 0) {
+                        console.log(err);
+                    } else {
+                        // Thêm thông tin chi tiết của Product vào mảng products
+                        products.push({
+                            ProductID: product[0].ProductID,
+                            ProductName: product[0].ProductName,
+                            ProductPrice: product[0].ProductPrice,
+                            ProductImageDefault: product[0].ProductImageDefault
+                        });
+                    }
+
+                    // Kiểm tra xem đã truy vấn thông tin cho tất cả ProductID hay chưa
+                    if (index === productIDs.length - 1) {
+                        // Gọi callback result với kết quả cuối cùng
+                        result(products);
+                    }
+                });
+            });
+        }
     });
 }
 

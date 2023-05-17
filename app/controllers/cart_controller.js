@@ -10,6 +10,16 @@ exports.getByUserId = function (req, res) {
             });
         });
 }
+///////////////////////////////////////////
+exports.getCartDrawerContainer = function (req, res) {
+    var token = req.get("Authorization");
+    JWT.checkAccessToken(token)
+        .then(result => {
+            Cart.getCartDrawerContainer(result.data.UserID, function (data) {
+                res.send({ result: data });
+            });
+        });
+}
 //////////////////////////////////////////////
 exports.addCartItem = function (req, res) {
     Cart.addCartItem(req.body, function (data) {
