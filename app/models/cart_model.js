@@ -9,12 +9,10 @@ const CartItem = function (cartitem) {
 
 CartItem.getByUserId = function (id, result) {
     db.query("SELECT * FROM cartitem WHERE UserID = ?", id, function (err, cartitem) {
-        if (err || cartitem.length == 0){
-            console.log(err);
-            result (err);
+        if (err || cartitem.length == 0) {
+            result(err);
         }
-        else{
-            console.log(cartitem)
+        else {
             result(cartitem);
         }
     });
@@ -23,7 +21,6 @@ CartItem.getByUserId = function (id, result) {
 CartItem.getCartDrawerContainer = function (id, result) {
     db.query("SELECT ProductID FROM cartitem WHERE UserID = ?", id, function (err, cartitems) {
         if (err || cartitems.length == 0) {
-            console.log(err);
             result(err);
         } else {
             // Lấy danh sách ProductID từ kết quả truy vấn cartitem
@@ -38,7 +35,7 @@ CartItem.getCartDrawerContainer = function (id, result) {
             productIDs.forEach(function (productID, index) {
                 db.query("SELECT * FROM product WHERE ProductID = ?", productID, function (err, product) {
                     if (err || product.length == 0) {
-                        console.log(err);
+                        result(products);
                     } else {
                         // Thêm thông tin chi tiết của Product vào mảng products
                         products.push({
@@ -48,7 +45,6 @@ CartItem.getCartDrawerContainer = function (id, result) {
                             ProductImageDefault: product[0].ProductImageDefault
                         });
                     }
-
                     // Kiểm tra xem đã truy vấn thông tin cho tất cả ProductID hay chưa
                     if (index === productIDs.length - 1) {
                         // Gọi callback result với kết quả cuối cùng
@@ -61,36 +57,26 @@ CartItem.getCartDrawerContainer = function (id, result) {
 }
 
 CartItem.addCartItem = function (data, result) {
-    db.query("INSERT INTO cartitem SET ?", data, function (err, cartitem) {
-        if (err) {
-            result (err.sqlMessage);
-        }
+    db.query("SELECT * FROM cartitem WHERE UserID = ? and ProductID = ?", [data.UserID, data.ProductID], function (err, getCartRecord) {
+        if (getCartRecord[0] == null)
+            db.query("INSERT INTO cartitem SET ?", data, function (err, cartitem) {
+                if (err) {
+                    result(null);
+                }
+                else
+                    result(cartitem);
+            });
         else
-            result({ id: cartitem.CartID, ...data });
+            db.query("INSERT INTO cartitem SET ? ON DUPLICATE KEY UPDATE Quantity = Quantity + 1", getCartRecord, function (err, cartitem) {
+                if (err) {
+                    result(null);
+                }
+                else
+                    result(cartitem);
+            });
     });
-}
-// Add 1 similar product in cart so use PUT in controller b/c just update quantity cartitem
-/*
-    {
-        "ProductId": "",
-        "Quantity": "",
-        "ProductPrice": ""
-    }
-*/
-// ---------------------------------Cần xem lại---------------------------------------
-CartItem.addOneCartItem = function (data, result) {
-    db.query("UPDATE cartitem SET Quantity = Quantity + 1, SumPrice = ? WHERE ProductID =?"
-        , [data.ProductPrice * data.Quantity, data.ProductId]
-        , function (err, cartitem) {
-            if (err) {
-                result (err.sqlMessage);
-            }
-            else
-                result({ id: cartitem.CartID, ...data });
-        });
-}
-//-------------------------------------------------------------------------------------
 
+}
 
 // Thay đổi giá trị số lượng
 /*
@@ -99,22 +85,22 @@ CartItem.addOneCartItem = function (data, result) {
     TH3: User sửa trực tiếp số lượng. Gọi script, truyền change_amount = số lượng user nhập
 
     Thực thi lệnh UPDATE, gọi đến trigger update_amount
-*/  
+*/
 
 CartItem.changeQuantity = function (data, result) {
     db.query("UPDATE cartitem SET Quantity =? WHERE CartItemID =?"
-        , [data.ChangeAmount,data.CartItemID]
+        , [data.ChangeAmount, data.CartItemID]
         , function (err, cartitem) {
             if (err || cartitem.affectedRows == 0) {
                 result(cartitem);
             }
             else
-                result({ id: cartitem.CartItemID, ...data });
+                result(cartitem);
         });
 }
 
 CartItem.detele = function (data, result) {
-    db.query("DELETE FROM cartitem WHERE CartItemID =?", data.CartItemID, function (err,cartitem) {
+    db.query("DELETE FROM cartitem WHERE CartItemID =?", data.CartItemID, function (err, cartitem) {
         if (err || cartitem.affectedRows == 0) {
             result(null);
         }

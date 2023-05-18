@@ -46,7 +46,6 @@ Product.getByCategoryId = function (id, result) {
 }
 
 Product.create = function (data, result) {
-    console.log(data.UserID)
     db.query("INSERT INTO product SET ?", data, function (err, product) {
         if (err) {
             result (err.sqlMessage);

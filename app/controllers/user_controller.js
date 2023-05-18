@@ -61,7 +61,7 @@ exports.login = function (req, res) {
 				if (user) {
 					const accessToken = await JWT.createAccessToken(user)
 					const refreshToken = await JWT.createRefreshToken(user)
-					res.send({ accessToken: accessToken, refreshToken:refreshToken});
+					res.send({ accessToken: accessToken, refreshToken:refreshToken,UserID:user.UserID});
 				}
 				else {
 					res.status(401).send({ message: 'Sai mật khẩu' });

@@ -23,7 +23,10 @@ exports.getCartDrawerContainer = function (req, res) {
 //////////////////////////////////////////////
 exports.addCartItem = function (req, res) {
     Cart.addCartItem(req.body, function (data) {
-        res.send({ result: data });
+        if(data)
+            res.status(200).send({ result: data });
+        else
+            res.status(404).send(null);
     });
 }
 // Not done yet
