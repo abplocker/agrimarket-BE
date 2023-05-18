@@ -33,6 +33,20 @@ let checkAccessToken = function (token) {
         );
     });
 };
+//////////////////////////////////////////////////////
+let checkAccessToken1 = function (token) {
+    return new Promise(function (resolve, reject) {
+        jsonwebtoken.verify(token, jwt.ACCESS_TOKEN,
+            function (err, decoded) {
+                if (err) {
+                    return reject(err);
+                } else {
+                    return resolve(decoded.data);
+                }
+            }
+        );
+    });
+};
 ////////////////////////////////////////////////////
 let createRefreshToken = function (user) {
     return new Promise(function (resolve, reject) {
@@ -90,4 +104,5 @@ module.exports = {
     createRefreshToken: createRefreshToken,
     checkAccessToken: checkAccessToken,
     checkRefreshToken: checkRefreshToken,
+    checkAccessToken1:checkAccessToken1,
 }

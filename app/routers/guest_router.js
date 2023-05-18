@@ -25,6 +25,14 @@ module.exports = function (router) {
 			res.status(401).send(error)
 		}
 	});
+	router.get('/authorization', async function (req, res) {
+		try {
+			const check = await JWT.checkAccessToken1(req.headers.authorization);
+			res.send({Role:check.Role});
+		} catch (error) {
+			res.status(401).send(error)
+		}
+	});
 	router.get('/check_refresh_token', async function (req, res) {
 		try {
 			const check = await JWT.checkRefreshToken(req.headers.authorization);
