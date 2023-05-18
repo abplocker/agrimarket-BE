@@ -36,8 +36,15 @@ exports.getById = async (req, res) => {
 };
 
 exports.createUser = function (req, res) {
-	User.create(req.body, function (data) {
-		res.send({ result: data });
+	User.create(req.body, async function (data) {
+		if(data){
+			const accessToken = await JWT.createAccessToken(data)
+			const refreshToken = await JWT.createRefreshToken(data)
+			res.send({ accessToken: accessToken, refreshToken:refreshToken,UserID:data.UserID});
+		}
+		else {
+			res.status(401).send({message : "Đăng kí thất bại"})
+		}
 	});
 }
 

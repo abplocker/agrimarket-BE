@@ -31,12 +31,15 @@ User.getById = function (id, result) {
 }
 
 User.create = function (data, result) {
-    db.query("INSERT INTO users SET ?", data, function (err, user) {
+    db.query("INSERT INTO users SET ?", data, function (err) {
         if (err) {
-            result(err.sqlMessage);
+            result(null);
         }
-        else
-            result({ id: user.UserID, ...data });
+        else {
+            db.query("SELECT * from users WHERE UserName = ?", data.UserName, function (err, user){
+                result(user[0])
+            })
+        }
     });
 }
 
