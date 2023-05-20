@@ -113,6 +113,10 @@ Product.update_info = function (data, result) {
 }
 
 Product.search = function (productName, result) {
+    if (!productName.trim()) {
+        result();
+        return;
+    }
     db.query("SELECT * FROM product  WHERE ProductName LIKE?", 
     ["%" + productName + "%"], function (err, product) {
         if (err || product.length == 0) {
