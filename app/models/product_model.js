@@ -84,7 +84,7 @@ Product.getBySellerId = function (id, result) {
 Product.create = function (data, result) {
     db.query("INSERT INTO product SET ?", data, function (err, product) {
         if (err) {
-            result (err.sqlMessage);
+            result (null);
         }
         else
             result({ id: product.productID,...data });
