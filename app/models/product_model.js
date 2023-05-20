@@ -45,6 +45,42 @@ Product.getByCategoryId = function (id, result) {
     });
 }
 
+Product.getBySellerId = function (id, result) {
+    db.query("SELECT * FROM product WHERE UserID = ?", id, function (err, product) {
+        if (err || product.length == 0)
+            result (null);
+        else
+        {
+            const products = [];
+            const categoryIDs = product.map(item => item.CategoryID); 
+            categoryIDs.forEach(function (categoryID, index) {
+                db.query("SELECT * FROM category WHERE CategoryID = ?", categoryID, function (err, category) {
+                    if (err || category.length == 0) {
+                        result(products);
+                    } else {
+                        // Thêm thông tin chi tiết của Product vào mảng products
+                        products.push({
+                            ProductName : product[index].ProductName,
+                            ProductQuantity : product[index].ProductQuantity,
+                            ProductPrice : product[index].ProductPrice,
+                            ProductImageDefault : product[index].ProductImageDefault,
+                            CategoryID: category[0].CategoryID,
+                            CategoryName: category[0].CategoryName,
+                        });
+                    }
+                    if (index === categoryIDs.length - 1) {
+                        result(products);
+                    }
+                });
+            });
+
+
+
+        }
+        // Trả về thông tin của nhiều sản phẩm trong category
+    });
+}
+
 Product.create = function (data, result) {
     db.query("INSERT INTO product SET ?", data, function (err, product) {
         if (err) {

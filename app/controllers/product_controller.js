@@ -14,6 +14,12 @@ exports.getByCategoryId = function (req, res) {
   });
 }
 
+exports.getBySellerId = function (req, res) {
+  Product.getBySellerId(req.headers.seller, function (data) {
+    res.send({ result: data });
+  });
+}
+
 exports.getDetail = async function (req, res) {
   try {
     const [product, images] = await Promise.all([

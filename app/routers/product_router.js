@@ -6,6 +6,8 @@ module.exports = function (router) {
 
 	router.get('/product/category/:id', productRouter.getByCategoryId);
 
+	router.get('/seller/product', productRouter.getBySellerId);
+
     router.get('/product/detail/:id', productRouter.getDetail);
 
 	router.post('/product/add', productRouter.create);
