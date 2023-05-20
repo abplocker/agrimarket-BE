@@ -52,17 +52,17 @@ DROP TABLE IF EXISTS `cartitem`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cartitem` (
-  `CartItemID` varchar(24) NOT NULL DEFAULT (_utf8mb4''),
+  `CartItemID` int NOT NULL AUTO_INCREMENT,
   `UserID` varchar(24) NOT NULL DEFAULT (_utf8mb4''),
   `ProductID` varchar(24) NOT NULL DEFAULT (_utf8mb4''),
   `Quantity` int NOT NULL DEFAULT (0),
-  `SumPrice` decimal(18,2) NOT NULL DEFAULT (0),
+  `SumPrice` decimal(18,2) DEFAULT '0.00',
   PRIMARY KEY (`CartItemID`),
-  KEY `FK_CartItem_Product` (`ProductID`),
   KEY `FK_CartItem_User` (`UserID`),
-  CONSTRAINT `FK_CartItem_Product` FOREIGN KEY (`ProductID`) REFERENCES `product` (`ProductID`),
+  KEY `FK_CartItem_Product` (`ProductID`),
+  CONSTRAINT `FK_CartItem_Product` FOREIGN KEY (`ProductID`) REFERENCES `product` (`ProductID`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `FK_CartItem_User` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,9 +71,43 @@ CREATE TABLE `cartitem` (
 
 LOCK TABLES `cartitem` WRITE;
 /*!40000 ALTER TABLE `cartitem` DISABLE KEYS */;
-INSERT INTO `cartitem` VALUES ('C001','A01','P01',1,0.00),('C002','A01','P02',1,0.00),('C003','A01','P03',1,0.00),('C004','A01','P04',1,0.00),('C009','A01','P05',1,0.00);
+INSERT INTO `cartitem` VALUES (1,'A01','P01',3,3000.00),(2,'A01','P02',3,405.00),(3,'A01','P03',4,1160.00),(4,'A01','P04',5,3175.00),(5,'A01','P06',6,1248.00),(9,'A01','P05',7,553.00),(14,'A01','P08',8,1856.00),(36,'S01','P03',3,870.00),(37,'S01','P010',1,0.00),(38,'S01','P01',1,0.00),(39,'U1684438321','P03',5,1450.00),(44,'U1684437841','P01',13,13000.00);
 /*!40000 ALTER TABLE `cartitem` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `cartitem_BEFORE_INSERT` BEFORE INSERT ON `cartitem` FOR EACH ROW BEGIN
+SET NEW.SumPrice = NEW.Quantity * (SELECT ProductPrice FROM product WHERE ProductID = NEW.ProductID);
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `cartitem_BEFORE_UPDATE` BEFORE UPDATE ON `cartitem` FOR EACH ROW BEGIN
+    SET NEW.SumPrice = NEW.Quantity * (SELECT ProductPrice FROM product WHERE ProductID = NEW.ProductID);
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `category`
@@ -237,7 +271,7 @@ CREATE TABLE `product` (
   `ProductID` varchar(24) NOT NULL DEFAULT (_utf8mb4''),
   `ProductName` varchar(254) NOT NULL DEFAULT (_utf8mb4''),
   `ProductPrice` varchar(254) NOT NULL DEFAULT (_utf8mb4''),
-  `ProductDescription` varchar(586) NOT NULL DEFAULT (_utf8mb4''),
+  `ProductDescription` varchar(8000) NOT NULL DEFAULT '',
   `ProductSlug` varchar(254) NOT NULL DEFAULT (_utf8mb4''),
   `ProductActive` int NOT NULL DEFAULT (1),
   `ProductQuantity` int NOT NULL DEFAULT (0),
@@ -263,6 +297,25 @@ LOCK TABLES `product` WRITE;
 INSERT INTO `product` VALUES ('P01','HẠT CÀ CHUA SAAHO TO 325','1000','ĐẶC TRƯNG: nhà máy xác định, Tốt Ở lại màu xanh lá cây, tán lá màu xanh đậm, Bộ tản nhiệt tốt, Trái Cây Chắc Rất Tốt, Tiềm năng năng suất cao','',1,1000,NULL,NULL,'P01-1.png','C01','S01'),('P010','THUỐC CỎ SEMPRA','224','Thuốc diệt cỏ Sempra là loại thuốc diệt cỏ đầu tiên được giới thiệu ở Ấn Độ bởi Dhanuka Agritech Ltd để kiểm soát hiệu quả Cyperus rotundus.','',0,186,NULL,NULL,'P10-1.png','C05','S02'),('P02','SURABHI CORIANDER','135','Surabhi là giống rau mùi mạnh mẽ có tiềm năng năng suất tuyệt vời. Thích hợp cho nhiều vết cắt với lá rất hấp dẫn, to, sáng bóng, có mùi thơm. Là giống ra muộn nên có thể trồng quanh năm.','',1,164,NULL,NULL,'P02-1.png','C01','S03'),('P03','HẠT GIỐNG DƯA CHUA LAI KRISH F1','290','Lần Thu Hoạch Đầu Tiên- 30-35 Ngày, Số lượng hạt giống trên mỗi mẫu Anh-0,180-0,250 kg, Khoảng cách gieo hạt giữa hàng và luống-4-6 feet, Khoảng cách gieo hạt giữa các cây-1,5-2 feet','',1,1290,NULL,NULL,'P03-1.png','C01','S04'),('P04','TIẾP XÚC THUỐC CÔN TRÙNG','635','BASF Exponus là một loại thuốc diệt côn trùng mang tính cách mạng mang đến cho bạn sức mạnh đối với những loài côn trùng khó tính.','',1,546,NULL,NULL,'P04-1.png','C02','S02'),('P05','THUỐC CÔN TRÙNG TAFGOR (DIMETHOATE 30% EC), KIỂM SOÁT SÂU RÂU VÀ SÂU MÚT','79','Tafgor thuộc nhóm Organophosphate. Nó có hiệu quả cao trong việc kiểm soát sâu bướm và sâu bướm.','',1,598,NULL,NULL,'P05-1.png','C02','S01'),('P06','THUỐC CÔN TRÙNG CORAGEN (CHLORANTRANILIPROLE 18,5% SC)','208','Thuốc trừ sâu Coragen® là một loại thuốc trừ sâu Anthranilic diamide Broad Spectrum ở dạng đậm đặc huyền phù.','',1,200,NULL,NULL,'P06-1.png','C02','S05'),('P07','Thuốc diệt nấm SAAF (CARBENDAZIM 12% + MANCOZEB 63% WP) KIỂM SOÁT BỆNH MỤN THÙ, SỮA BỤNG VÀ BỆNH RUST','80','Một loại thuốc diệt nấm cổ điển đã được chứng minh với hành động tiếp xúc và có hệ thống. Chế độ diệt nấm hành động kép đáng tin cậy và được sử dụng rộng rãi nhất','',1,255,NULL,NULL,'P07-1.png','C03','S05'),('P08','PHÂN BÓN VI LƯỢNG MULTIPLEX KRANTI','232','Chứa các chất dinh dưỡng thiết yếu cho cây trồng (Chính, Phụ và Vi lượng). Hầu hết các chất dinh dưỡng ở dạng chelate.','',1,222,NULL,NULL,'P08-1.png','C04','S01'),('P09','THUỐC CỎ ROUNDUP','186','Thuốc diệt cỏ Roundup là sản phẩm chủ đạo trong lĩnh vực kinh doanh hóa chất nông nghiệp của Monsanto.','',1,186,NULL,NULL,'P09-1.png','C05','S02');
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `product_BEFORE_INSERT` BEFORE INSERT ON `product` FOR EACH ROW BEGIN
+DECLARE gettimestamp INT;
+    SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP()) INTO gettimestamp;
+    SET NEW.ProductID = CONCAT('P', gettimestamp);
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `users`
@@ -293,9 +346,42 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('A01','admin','admin','admin','admin@gmail.com','0123456789','',3,1,NULL),('S01','sell','sell','sell','sell@gmail.com','08654852462','',2,1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7IlVzZXJJRCI6IlMwMSIsIlVzZXJOYW1lIjoic2VsbCIsIlJvbGUiOjJ9LCJpYXQiOjE2ODQxODQyMjAsImV4cCI6MTcxNTcyMDIyMH0._xKwurokXvS32mxP57s1vFApYzCqDX1_uiKmPfAm8zw'),('S02','sell2','sell2','sell','sell2@gmail.com','0523452542','',2,1,NULL),('S03','sell3','sell3','sell','sell3@gmail.com','0274525845','',2,1,NULL),('S04','sell4','sell4','sell','sell4@gmail.com','0956842357','',2,1,NULL),('S05','sell5','sell5','sell','sell5@gmail.com','0512369756','',2,1,NULL),('U1','string10','string10','User 03','string3','string4','string5',1,1,NULL);
+INSERT INTO `users` VALUES ('A01','admin','admin','admin','admin@gmail.com','0123456789','',3,1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7IlVzZXJJRCI6IkEwMSIsIlVzZXJOYW1lIjoiYWRtaW4iLCJSb2xlIjozLCJGdWxsTmFtZSI6ImFkbWluIn0sImlhdCI6MTY4NDQ2Njg1MywiZXhwIjoxNzE2MDAyODUzfQ.nmh8myGrdwxxCK_G5wNF8cvVerxmOXy50w48rJUU2ZY'),('S01','sell','sell','sell','sell@gmail.com','08654852462','',2,1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7IlVzZXJJRCI6IlMwMSIsIlVzZXJOYW1lIjoic2VsbCIsIlJvbGUiOjIsIkZ1bGxOYW1lIjoic2VsbCJ9LCJpYXQiOjE2ODQ1NzU1OTYsImV4cCI6MTcxNjExMTU5Nn0.4AqoCgG_CRfmDDIVNIYdev7rOdaM9Ml072F-WuduL3Q'),('S02','sell2','sell2','sell','sell2@gmail.com','0523452542','',2,1,'X8hEpcwMwIK0DqPFCXA'),('S03','sell3','sell3','sell','sell3@gmail.com','0274525845','',2,1,NULL),('S04','sell4','sell4','sell','sell4@gmail.com','0956842357','',2,1,NULL),('S05','sell5','sell5','sell','sell5@gmail.com','0512369756','',2,1,NULL),('U1684437841','abc','abc','abc','abc','0192301293','',1,1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7IlVzZXJJRCI6IlUxNjg0NDM3ODQxIiwiVXNlck5hbWUiOiJhYmMiLCJSb2xlIjoxLCJGdWxsTmFtZSI6ImFiYyJ9LCJpYXQiOjE2ODQ1Njk0MzUsImV4cCI6MTcxNjEwNTQzNX0.TH0R7LliZsX1YfY9BE-CqAyImilp6gOc5G8w6NW5DBk'),('U1684438321','abc31','abc','abc32','abc','24234234','',1,1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7IlVzZXJJRCI6IlUxNjg0NDM4MzIxIiwiVXNlck5hbWUiOiJhYmMzMSIsIlBhc3N3b3JkIjoiYWJjIiwiRnVsbE5hbWUiOiJhYmMzMiIsIkVtYWlsIjoiYWJjIiwiUGhvbmUiOiIyNDIzNDIzNCIsIkF2YXRhciI6IiIsIlJvbGUiOjEsIklzQWN0aXZlIjoxLCJSZWZyZXNoVG9rZW4iOm51bGx9LCJpYXQiOjE2ODQ0MzgzMjEsImV4cCI6MTcxNTk3NDMyMX0.xN161yAhPg0EeA1Z9Oqkb59taw43m8llkvKrF6sn2c0');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `generate_user_id` BEFORE INSERT ON `users` FOR EACH ROW BEGIN
+    DECLARE gettimestamp INT;
+    SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP()) INTO gettimestamp;
+    IF NEW.Role = 3 THEN
+        SET NEW.UserID = CONCAT('A', gettimestamp);
+    ELSEIF NEW.Role = 2 THEN
+        SET NEW.UserID = CONCAT('S', gettimestamp);
+    ELSEIF NEW.Role = 1 THEN
+        SET NEW.UserID = CONCAT('U', gettimestamp);
+    END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Dumping events for database 'agrimarket'
+--
+
+--
+-- Dumping routines for database 'agrimarket'
+--
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -306,4 +392,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-16  4:00:03
+-- Dump completed on 2023-05-20 17:10:45
