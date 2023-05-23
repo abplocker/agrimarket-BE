@@ -9,8 +9,10 @@ exports.get_all = function (req, res) {
 }
 
 exports.getById = async (req, res) => {
-	const userId = req.params.id;
+	var token = req.get("Authorization");
 	try {
+		const result = await JWT.checkAccessToken(token);
+		const userId = result.data.UserID;
 		const [user, address] = await Promise.all([
 			new Promise((resolve, reject) => {
 				User.getById(userId, (user) => {
@@ -37,13 +39,13 @@ exports.getById = async (req, res) => {
 
 exports.createUser = function (req, res) {
 	User.create(req.body, async function (data) {
-		if(data){
+		if (data) {
 			const accessToken = await JWT.createAccessToken(data)
 			const refreshToken = await JWT.createRefreshToken(data)
-			res.send({ accessToken: accessToken, refreshToken:refreshToken,UserID:data.UserID});
+			res.send({ accessToken: accessToken, refreshToken: refreshToken, UserID: data.UserID });
 		}
 		else {
-			res.status(401).send({message : "Đăng kí thất bại"})
+			res.status(401).send({ message: "Đăng kí thất bại" })
 		}
 	});
 }
@@ -68,7 +70,7 @@ exports.login = function (req, res) {
 				if (user) {
 					const accessToken = await JWT.createAccessToken(user)
 					const refreshToken = await JWT.createRefreshToken(user)
-					res.send({ accessToken: accessToken, refreshToken:refreshToken,UserID:user.UserID});
+					res.send({ accessToken: accessToken, refreshToken: refreshToken, UserID: user.UserID });
 				}
 				else {
 					res.status(401).send({ message: 'Sai mật khẩu' });

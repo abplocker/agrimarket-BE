@@ -33,7 +33,7 @@ Category.create = function (data, result) {
 Category.detele = function (data, result) {
     db.query("DELETE FROM category WHERE CategoryId =?", data.CategoryID, function (err) {
         if (err) {
-            result (err.sqlMessage);
+            result (err);
         }
         else
             result("Đã xoá thành công");

@@ -14,7 +14,7 @@ const Product = function (product) {
 }
 
 Product.get_all = function (result) {
-    db.query("SELECT * FROM product", function (err, product) {
+    db.query("SELECT * FROM product ORDER BY ProductUpdatedAt DESC, ProductCreatedAt DESC", function (err, product) {
         if (err)
             result (err.sqlMessage);
         else{

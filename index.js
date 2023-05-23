@@ -11,16 +11,16 @@ app.use(cors());
 app.use('/images', express.static(path.join(__dirname, 'images')));
 // Các routers...
 // Sắp xếp theo thứ tự...
-require('./app/routers/category_router')(app); // comment
-require('./app/routers/product_router')(app); // comment
-require('./app/routers/post_router')(app); // comment
-require('./app/routers/guest_router')(app); // comment
-require('./app/routers/handle_file')(app); // comment
-app.use(auth_middleware.isAuth); // comment
+require('./app/routers/category_router')(app); 
+require('./app/routers/product_router')(app); 
+require('./app/routers/post_router')(app);
+require('./app/routers/guest_router')(app); 
+require('./app/routers/handle_file')(app);
+app.use(auth_middleware.isAuth); 
 // Token hợp lệ, mới chạy vào các router sau.
-require('./app/routers/user_router')(app); // comment
-require('./app/routers/cart_router')(app); // comment
-// // require('./app/routers/order_router')(app);...
-app.listen(3000, function () { // comment
+require('./app/routers/user_router')(app); 
+require('./app/routers/cart_router')(app); 
+// require('./app/routers/order_router')(app);...
+app.listen(3000, function () { 
 	console.log("Server listening on http://localhost:3000");
 })

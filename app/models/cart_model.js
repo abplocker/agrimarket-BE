@@ -102,7 +102,6 @@ CartItem.addCartItem = function (data, result) {
                     result(cartitem);
             });
     });
-
 }
 
 // Thay đổi giá trị số lượng
