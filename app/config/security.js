@@ -90,7 +90,7 @@ let checkRefreshToken = function (token) {
 let refreshAccessToken = async function (refreshToken) {
     try {
         user = await checkRefreshToken(refreshToken);
-        const accessToken = await createAccessToken(user);
+        const accessToken = await createAccessToken(user.data);
         return accessToken;
     } catch (error) {
         return null

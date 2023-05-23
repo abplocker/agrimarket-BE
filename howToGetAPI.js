@@ -22,7 +22,6 @@ async function getApi(url){
         },
     });
     var data = await response.json();
-    console.log(data.result);
 }
 
 getApi(api_url + "/user/all");                         // comment
@@ -50,7 +49,6 @@ async function postApi(url, user){                   // comment
         body: JSON.stringify(user),
     });
     var data = await response.json();
-    console.log(data.result);
 }
 
 // postApi(api_url + "/user/add", user);...

@@ -13,7 +13,7 @@ module.exports = function (router) {
 	router.get('/refresh_access_token', async function (req, res) {
 		const token = await JWT.refreshAccessToken(req.headers.authorization);
 		if (token == null)
-			res.status(401).send("Không tồn tại refresh token trong database, vui lòng đăng nhập lại")
+			res.status(401).send({message:"Không tồn tại refresh token trong database, vui lòng đăng nhập lại"})
 		else
 			res.send({ accessToken: token })
 	});
