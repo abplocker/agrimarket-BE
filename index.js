@@ -15,7 +15,7 @@ require('./app/routers/category_router')(app);
 require('./app/routers/product_router')(app); 
 require('./app/routers/post_router')(app);
 require('./app/routers/guest_router')(app); 
-require('./app/routers/handle_file')(app);
+require('./app/routers/handle_file_router')(app);
 app.use(auth_middleware.isAuth); 
 // Token hợp lệ, mới chạy vào các router sau.
 require('./app/routers/user_router')(app); 

@@ -46,7 +46,10 @@ exports.create = function (req, res) {
     .then(result => {
       if (result.data.UserID == req.body.UserID && result.data.Role == 2)
         Product.create(req.body, function (data) {
-          res.send({ result: data });
+          if(data)
+            res.send({ result: data });
+            else
+            res.status(401).send({ message: "Thêm thất bại" });
         });
       else
         res.status(401).send(result.data.UserID, req.body.UserID, result.data.Role);
@@ -78,6 +81,15 @@ exports.search = function (req, res) {
   const searchData = req.query.ProductName;
   Product.search(searchData, function (data) {
     res.send({ result: data });
+  });
+}
+exports.changeActive = function (req,res){
+  const data = req.body;
+  Product.changeActive(data, function (data) {
+    if(data)
+    res.send({ result: data });
+    else
+    res.status(404).send();
   });
 }
 

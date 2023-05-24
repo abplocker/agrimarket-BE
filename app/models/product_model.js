@@ -14,7 +14,7 @@ const Product = function (product) {
 }
 
 Product.get_all = function (result) {
-    db.query("SELECT * FROM product ORDER BY ProductUpdatedAt DESC, ProductCreatedAt DESC", function (err, product) {
+    db.query("SELECT * FROM product WHERE ProductActive = 1 ORDER BY ProductUpdatedAt DESC, ProductCreatedAt DESC", function (err, product) {
         if (err)
             result (err.sqlMessage);
         else{
@@ -60,7 +60,9 @@ Product.getBySellerId = function (id, result) {
                     } else {
                         // Thêm thông tin chi tiết của Product vào mảng products
                         products.push({
+                            ProductID : product[index].ProductID,
                             ProductName : product[index].ProductName,
+                            ProductActive : product[index].ProductActive,
                             ProductQuantity : product[index].ProductQuantity,
                             ProductPrice : product[index].ProductPrice,
                             ProductImageDefault : product[index].ProductImageDefault,
@@ -92,9 +94,10 @@ Product.create = function (data, result) {
 }
 
 Product.detele = function (data, result) {
-    db.query("DELETE FROM product WHERE ProductId =?", data.productID, function (err) {
+    db.query("DELETE FROM product WHERE ProductId =?", data.ProductID, function (err) {
         if (err) {
-            result (err.sqlMessage);
+            console.log(err)
+            result (null);
         }
         else
             result("Đã xoá thành công");
@@ -104,6 +107,16 @@ Product.detele = function (data, result) {
 Product.update_info = function (data, result) {
     db.query("UPDATE product SET ? WHERE ProductID =? AND UserID =?", 
     [data,data.ProductID,data.UserID], function (err, product) {
+        if (err || product.affectedRows == 0) {
+            result (null);
+        }
+        else
+            result({ id: product.productID, ...data });
+    });
+}
+Product.changeActive = function (data, result) {
+    db.query("UPDATE product SET ProductActive = ? WHERE ProductID =? AND UserID =?", 
+    [data.ProductActive,data.ProductID,data.UserID], function (err, product) {
         if (err || product.affectedRows == 0) {
             result (null);
         }

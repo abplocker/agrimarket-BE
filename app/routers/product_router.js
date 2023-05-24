@@ -16,5 +16,7 @@ module.exports = function (router) {
 
 	router.put('/product/update_info',productRouter.update_info);
 
+	router.put('/product/change_active',productRouter.changeActive);
+
 	router.get('/product/search', productRouter.search);
 };
