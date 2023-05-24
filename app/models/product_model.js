@@ -16,7 +16,7 @@ const Product = function (product) {
 Product.get_all = function (result) {
     db.query("SELECT * FROM product WHERE ProductActive = 1 ORDER BY ProductUpdatedAt DESC, ProductCreatedAt DESC", function (err, product) {
         if (err)
-            result (err.sqlMessage);
+            result (err);
         else{
             result(product);
         }
@@ -24,7 +24,7 @@ Product.get_all = function (result) {
 }
 // View product details
 Product.getDetail = function (id, result) {
-    db.query("SELECT * FROM product WHERE ProductId = ?", id, function (err, product) {
+    db.query("SELECT ProductID, ProductName, ProductPrice, ProductDescription, ProductSlug, ProductActive, ProductQuantity, ProductImageDefault, CategoryID, UserID, Rating FROM product WHERE ProductID = ?", id, function (err, product) {
         if (err || product.length == 0)
             result (null);
         else
@@ -36,7 +36,7 @@ Product.getDetail = function (id, result) {
 Product.getByCategoryId = function (id, result) {
     db.query("SELECT * FROM product WHERE CategoryId = ?", id, function (err, product) {
         if (err || product.length == 0)
-            result (err.sqlMessage);
+            result (err);
         else
         {
             result(product);
@@ -108,6 +108,7 @@ Product.update_info = function (data, result) {
     db.query("UPDATE product SET ? WHERE ProductID =? AND UserID =?", 
     [data,data.ProductID,data.UserID], function (err, product) {
         if (err || product.affectedRows == 0) {
+            console.log(err)
             result (null);
         }
         else
