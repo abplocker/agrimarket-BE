@@ -62,7 +62,7 @@ CREATE TABLE `cartitem` (
   KEY `FK_CartItem_Product` (`ProductID`),
   CONSTRAINT `FK_CartItem_Product` FOREIGN KEY (`ProductID`) REFERENCES `product` (`ProductID`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `FK_CartItem_User` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`)
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,7 +71,7 @@ CREATE TABLE `cartitem` (
 
 LOCK TABLES `cartitem` WRITE;
 /*!40000 ALTER TABLE `cartitem` DISABLE KEYS */;
-INSERT INTO `cartitem` VALUES (1,'A01','P01',3,3000.00),(2,'A01','P02',3,405.00),(3,'A01','P03',4,1160.00),(4,'A01','P04',5,3175.00),(5,'A01','P06',6,1248.00),(9,'A01','P05',7,553.00),(14,'A01','P08',8,1856.00),(36,'S01','P03',3,870.00),(37,'S01','P010',1,0.00),(38,'S01','P01',1,0.00),(39,'U1684438321','P03',5,1450.00),(44,'U1684437841','P01',13,13000.00);
+INSERT INTO `cartitem` VALUES (1,'A01','P01',3,3000.00),(2,'A01','P02',3,405.00),(3,'A01','P03',4,1160.00),(4,'A01','P04',5,3175.00),(5,'A01','P06',6,1248.00),(9,'A01','P05',7,553.00),(14,'A01','P08',8,1856.00),(36,'S01','P03',3,870.00),(37,'S01','P010',1,0.00),(38,'S01','P01',1,0.00),(39,'U1684438321','P03',5,1450.00),(44,'U1684437841','P01',14,14000.00);
 /*!40000 ALTER TABLE `cartitem` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -140,6 +140,51 @@ LOCK TABLES `category` WRITE;
 INSERT INTO `category` VALUES ('C01','Hạt giống','','C01.png',1,NULL,NULL,'A01'),('C02','Thuốc trừ sâu','','C02.png',1,NULL,NULL,'A01'),('C03','Thuốc diệt nấm','','C03.png',1,NULL,NULL,'A01'),('C04','Thuốc tăng trưởng','','C04.png',1,NULL,NULL,'A01'),('C05','Thuốc diệt cỏ','','C05.png',1,NULL,NULL,'A01');
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `favorite`
+--
+
+DROP TABLE IF EXISTS `favorite`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `favorite` (
+  `ProductID` varchar(24) NOT NULL,
+  `UserID` varchar(24) NOT NULL,
+  `Favorite_Time` datetime DEFAULT NULL,
+  PRIMARY KEY (`ProductID`,`UserID`),
+  KEY `favorite_ibfk_2` (`UserID`),
+  CONSTRAINT `favorite_ibfk_1` FOREIGN KEY (`ProductID`) REFERENCES `product` (`ProductID`),
+  CONSTRAINT `favorite_ibfk_2` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `favorite`
+--
+
+LOCK TABLES `favorite` WRITE;
+/*!40000 ALTER TABLE `favorite` DISABLE KEYS */;
+INSERT INTO `favorite` VALUES ('P01','U1684437841','2023-05-23 10:00:00'),('P02','U1684437841',NULL),('P03','U1684437841',NULL),('P04','U1684437841',NULL);
+/*!40000 ALTER TABLE `favorite` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `favorite_BEFORE_INSERT` BEFORE INSERT ON `favorite` FOR EACH ROW BEGIN
+	SET NEW.Favorite_Time = NOW();
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `image`
@@ -270,7 +315,7 @@ DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product` (
   `ProductID` varchar(24) NOT NULL DEFAULT (_utf8mb4''),
   `ProductName` varchar(254) NOT NULL DEFAULT (_utf8mb4''),
-  `ProductPrice` varchar(254) NOT NULL DEFAULT (_utf8mb4''),
+  `ProductPrice` int NOT NULL,
   `ProductDescription` varchar(8000) NOT NULL DEFAULT '',
   `ProductSlug` varchar(254) NOT NULL DEFAULT (_utf8mb4''),
   `ProductActive` int NOT NULL DEFAULT (1),
@@ -280,6 +325,7 @@ CREATE TABLE `product` (
   `ProductImageDefault` varchar(50) DEFAULT NULL,
   `CategoryID` varchar(24) NOT NULL DEFAULT (_utf8mb4''),
   `UserID` varchar(24) NOT NULL DEFAULT (_utf8mb4''),
+  `Rating` float DEFAULT NULL,
   PRIMARY KEY (`ProductID`),
   KEY `FK_Product_Category` (`CategoryID`),
   KEY `FK_Product_Users` (`UserID`),
@@ -294,7 +340,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES ('P01','HẠT CÀ CHUA SAAHO TO 325','1000','ĐẶC TRƯNG: nhà máy xác định, Tốt Ở lại màu xanh lá cây, tán lá màu xanh đậm, Bộ tản nhiệt tốt, Trái Cây Chắc Rất Tốt, Tiềm năng năng suất cao','',1,1000,NULL,NULL,'P01-1.png','C01','S01'),('P010','THUỐC CỎ SEMPRA','224','Thuốc diệt cỏ Sempra là loại thuốc diệt cỏ đầu tiên được giới thiệu ở Ấn Độ bởi Dhanuka Agritech Ltd để kiểm soát hiệu quả Cyperus rotundus.','',0,186,NULL,NULL,'P10-1.png','C05','S02'),('P02','SURABHI CORIANDER','135','Surabhi là giống rau mùi mạnh mẽ có tiềm năng năng suất tuyệt vời. Thích hợp cho nhiều vết cắt với lá rất hấp dẫn, to, sáng bóng, có mùi thơm. Là giống ra muộn nên có thể trồng quanh năm.','',1,164,NULL,NULL,'P02-1.png','C01','S03'),('P03','HẠT GIỐNG DƯA CHUA LAI KRISH F1','290','Lần Thu Hoạch Đầu Tiên- 30-35 Ngày, Số lượng hạt giống trên mỗi mẫu Anh-0,180-0,250 kg, Khoảng cách gieo hạt giữa hàng và luống-4-6 feet, Khoảng cách gieo hạt giữa các cây-1,5-2 feet','',1,1290,NULL,NULL,'P03-1.png','C01','S04'),('P04','TIẾP XÚC THUỐC CÔN TRÙNG','635','BASF Exponus là một loại thuốc diệt côn trùng mang tính cách mạng mang đến cho bạn sức mạnh đối với những loài côn trùng khó tính.','',1,546,NULL,NULL,'P04-1.png','C02','S02'),('P05','THUỐC CÔN TRÙNG TAFGOR (DIMETHOATE 30% EC), KIỂM SOÁT SÂU RÂU VÀ SÂU MÚT','79','Tafgor thuộc nhóm Organophosphate. Nó có hiệu quả cao trong việc kiểm soát sâu bướm và sâu bướm.','',1,598,NULL,NULL,'P05-1.png','C02','S01'),('P06','THUỐC CÔN TRÙNG CORAGEN (CHLORANTRANILIPROLE 18,5% SC)','208','Thuốc trừ sâu Coragen® là một loại thuốc trừ sâu Anthranilic diamide Broad Spectrum ở dạng đậm đặc huyền phù.','',1,200,NULL,NULL,'P06-1.png','C02','S05'),('P07','Thuốc diệt nấm SAAF (CARBENDAZIM 12% + MANCOZEB 63% WP) KIỂM SOÁT BỆNH MỤN THÙ, SỮA BỤNG VÀ BỆNH RUST','80','Một loại thuốc diệt nấm cổ điển đã được chứng minh với hành động tiếp xúc và có hệ thống. Chế độ diệt nấm hành động kép đáng tin cậy và được sử dụng rộng rãi nhất','',1,255,NULL,NULL,'P07-1.png','C03','S05'),('P08','PHÂN BÓN VI LƯỢNG MULTIPLEX KRANTI','232','Chứa các chất dinh dưỡng thiết yếu cho cây trồng (Chính, Phụ và Vi lượng). Hầu hết các chất dinh dưỡng ở dạng chelate.','',1,222,NULL,NULL,'P08-1.png','C04','S01'),('P09','THUỐC CỎ ROUNDUP','186','Thuốc diệt cỏ Roundup là sản phẩm chủ đạo trong lĩnh vực kinh doanh hóa chất nông nghiệp của Monsanto.','',1,186,NULL,NULL,'P09-1.png','C05','S02');
+INSERT INTO `product` VALUES ('P01','HẠT CÀ CHUA SAAHO TO 325',1000,'ĐẶC TRƯNG: nhà máy xác định, Tốt Ở lại màu xanh lá cây, tán lá màu xanh đậm, Bộ tản nhiệt tốt, Trái Cây Chắc Rất Tốt, Tiềm năng năng suất cao','',1,1000,'1999-01-01 00:00:00','2023-05-24 18:21:43','P01-1.png','C01','S01',4.5),('P010','THUỐC CỎ SEMPRA',224,'Thuốc diệt cỏ Sempra là loại thuốc diệt cỏ đầu tiên được giới thiệu ở Ấn Độ bởi Dhanuka Agritech Ltd để kiểm soát hiệu quả Cyperus rotundus.','',1,186,'1999-01-01 00:00:00','1999-01-01 00:00:00','P10-1.png','C05','S01',4),('P02','SURABHI CORIANDER',135,'Surabhi là giống rau mùi mạnh mẽ có tiềm năng năng suất tuyệt vời. Thích hợp cho nhiều vết cắt với lá rất hấp dẫn, to, sáng bóng, có mùi thơm. Là giống ra muộn nên có thể trồng quanh năm.','',1,164,'1999-01-01 00:00:00','1999-01-01 00:00:00','P02-1.png','C01','S01',5),('P03','HẠT GIỐNG DƯA CHUA LAI KRISH F1',290,'Lần Thu Hoạch Đầu Tiên- 30-35 Ngày, Số lượng hạt giống trên mỗi mẫu Anh-0,180-0,250 kg, Khoảng cách gieo hạt giữa hàng và luống-4-6 feet, Khoảng cách gieo hạt giữa các cây-1,5-2 feet','',1,1290,'1999-01-01 00:00:00','1999-01-01 00:00:00','P03-1.png','C01','S01',5),('P04','TIẾP XÚC THUỐC CÔN TRÙNG',635,'BASF Exponus là một loại thuốc diệt côn trùng mang tính cách mạng mang đến cho bạn sức mạnh đối với những loài côn trùng khó tính.','',1,546,'1999-01-01 00:00:00','1999-01-01 00:00:00','P04-1.png','C02','S01',5),('P05','THUỐC CÔN TRÙNG TAFGOR (DIMETHOATE 30% EC), KIỂM SOÁT SÂU RÂU VÀ SÂU MÚT',79,'Tafgor thuộc nhóm Organophosphate. Nó có hiệu quả cao trong việc kiểm soát sâu bướm và sâu bướm.','',1,598,'1999-01-01 00:00:00','1999-01-01 00:00:00','P05-1.png','C02','S01',5),('P06','THUỐC CÔN TRÙNG CORAGEN (CHLORANTRANILIPROLE 18,5% SC)',208,'Thuốc trừ sâu Coragen® là một loại thuốc trừ sâu Anthranilic diamide Broad Spectrum ở dạng đậm đặc huyền phù.','',1,200,'1999-01-01 00:00:00','1999-01-01 00:00:00','P06-1.png','C02','S01',5),('P07','Thuốc diệt nấm SAAF (CARBENDAZIM 12% + MANCOZEB 63% WP) KIỂM SOÁT BỆNH MỤN THÙ, SỮA BỤNG VÀ BỆNH RUST',80,'Một loại thuốc diệt nấm cổ điển đã được chứng minh với hành động tiếp xúc và có hệ thống. Chế độ diệt nấm hành động kép đáng tin cậy và được sử dụng rộng rãi nhất','',1,255,'1999-01-01 00:00:00','1999-01-01 00:00:00','P07-1.png','C03','S01',5),('P08','PHÂN BÓN VI LƯỢNG MULTIPLEX KRANTI',232,'Chứa các chất dinh dưỡng thiết yếu cho cây trồng (Chính, Phụ và Vi lượng). Hầu hết các chất dinh dưỡng ở dạng chelate.','',1,222,'1999-01-01 00:00:00','1999-01-01 00:00:00','P08-1.png','C04','S01',5),('P09','THUỐC CỎ ROUNDUP',186,'Thuốc diệt cỏ Roundup là sản phẩm chủ đạo trong lĩnh vực kinh doanh hóa chất nông nghiệp của Monsanto.','',1,186,'1999-01-01 00:00:00','2023-01-01 00:00:00','P09-1.png','C05','S01',4);
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -310,6 +356,95 @@ DELIMITER ;;
 DECLARE gettimestamp INT;
     SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP()) INTO gettimestamp;
     SET NEW.ProductID = CONCAT('P', gettimestamp);
+	SET NEW.ProductCreatedAt = NOW();
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `product_BEFORE_UPDATE` BEFORE UPDATE ON `product` FOR EACH ROW BEGIN
+	SET NEW.ProductUpdatedAt = NOW();
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `rating`
+--
+
+DROP TABLE IF EXISTS `rating`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `rating` (
+  `RatingID` int NOT NULL AUTO_INCREMENT,
+  `ProductID` varchar(24) NOT NULL DEFAULT (_utf8mb4''),
+  `UserID` varchar(24) NOT NULL DEFAULT (_utf8mb4''),
+  `Rating` int DEFAULT NULL,
+  `Comment` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `Date` datetime DEFAULT NULL,
+  PRIMARY KEY (`RatingID`),
+  KEY `ProductID` (`ProductID`),
+  KEY `UserID` (`UserID`),
+  CONSTRAINT `rating_ibfk_1` FOREIGN KEY (`ProductID`) REFERENCES `product` (`ProductID`),
+  CONSTRAINT `rating_ibfk_2` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`),
+  CONSTRAINT `rating_chk_1` CHECK ((`Rating` between 1 and 5))
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rating`
+--
+
+LOCK TABLES `rating` WRITE;
+/*!40000 ALTER TABLE `rating` DISABLE KEYS */;
+INSERT INTO `rating` VALUES (2,'P01','U1684437841',4,'Hi mọi người',NULL),(3,'P01','U1684437841',5,'5551214',NULL);
+/*!40000 ALTER TABLE `rating` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `update_product_rating` AFTER INSERT ON `rating` FOR EACH ROW BEGIN
+  UPDATE product SET Rating = (
+    SELECT AVG(Rating) FROM rating WHERE ProductID = NEW.ProductID
+  ) WHERE ProductID = NEW.ProductID;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `update_product_rating_update` AFTER UPDATE ON `rating` FOR EACH ROW BEGIN
+  UPDATE product SET Rating = (
+    SELECT AVG(Rating) FROM rating WHERE ProductID = NEW.ProductID
+  ) WHERE ProductID = NEW.ProductID;
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -346,7 +481,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('A01','admin','admin','admin','admin@gmail.com','0123456789','',3,1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7IlVzZXJJRCI6IkEwMSIsIlVzZXJOYW1lIjoiYWRtaW4iLCJSb2xlIjozLCJGdWxsTmFtZSI6ImFkbWluIn0sImlhdCI6MTY4NDQ2Njg1MywiZXhwIjoxNzE2MDAyODUzfQ.nmh8myGrdwxxCK_G5wNF8cvVerxmOXy50w48rJUU2ZY'),('S01','sell','sell','sell','sell@gmail.com','08654852462','',2,1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7IlVzZXJJRCI6IlMwMSIsIlVzZXJOYW1lIjoic2VsbCIsIlJvbGUiOjIsIkZ1bGxOYW1lIjoic2VsbCJ9LCJpYXQiOjE2ODQ1NzU1OTYsImV4cCI6MTcxNjExMTU5Nn0.4AqoCgG_CRfmDDIVNIYdev7rOdaM9Ml072F-WuduL3Q'),('S02','sell2','sell2','sell','sell2@gmail.com','0523452542','',2,1,'X8hEpcwMwIK0DqPFCXA'),('S03','sell3','sell3','sell','sell3@gmail.com','0274525845','',2,1,NULL),('S04','sell4','sell4','sell','sell4@gmail.com','0956842357','',2,1,NULL),('S05','sell5','sell5','sell','sell5@gmail.com','0512369756','',2,1,NULL),('U1684437841','abc','abc','abc','abc','0192301293','',1,1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7IlVzZXJJRCI6IlUxNjg0NDM3ODQxIiwiVXNlck5hbWUiOiJhYmMiLCJSb2xlIjoxLCJGdWxsTmFtZSI6ImFiYyJ9LCJpYXQiOjE2ODQ1Njk0MzUsImV4cCI6MTcxNjEwNTQzNX0.TH0R7LliZsX1YfY9BE-CqAyImilp6gOc5G8w6NW5DBk'),('U1684438321','abc31','abc','abc32','abc','24234234','',1,1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7IlVzZXJJRCI6IlUxNjg0NDM4MzIxIiwiVXNlck5hbWUiOiJhYmMzMSIsIlBhc3N3b3JkIjoiYWJjIiwiRnVsbE5hbWUiOiJhYmMzMiIsIkVtYWlsIjoiYWJjIiwiUGhvbmUiOiIyNDIzNDIzNCIsIkF2YXRhciI6IiIsIlJvbGUiOjEsIklzQWN0aXZlIjoxLCJSZWZyZXNoVG9rZW4iOm51bGx9LCJpYXQiOjE2ODQ0MzgzMjEsImV4cCI6MTcxNTk3NDMyMX0.xN161yAhPg0EeA1Z9Oqkb59taw43m8llkvKrF6sn2c0');
+INSERT INTO `users` VALUES ('A01','admin','admin','admin','admin@gmail.com','0123456789','',3,1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7IlVzZXJJRCI6IkEwMSIsIlVzZXJOYW1lIjoiYWRtaW4iLCJSb2xlIjozLCJGdWxsTmFtZSI6ImFkbWluIn0sImlhdCI6MTY4NDkxNzQyMywiZXhwIjoxNzE2NDUzNDIzfQ.fDi80zI2nxGODE_mFTe-LtE-FZjzQ5konLeVrvXAXBY'),('S01','sell','sell','sell','sell@gmail.com','08654852462','',2,1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7IlVzZXJJRCI6IlMwMSIsIlVzZXJOYW1lIjoic2VsbCIsIlJvbGUiOjIsIkZ1bGxOYW1lIjoic2VsbCJ9LCJpYXQiOjE2ODQ5MzUwODEsImV4cCI6MTcxNjQ3MTA4MX0.mpl50Fbeug_GObfykQs9OqzlWIMhdWdHWIgz7xBVZ1Y'),('S02','sell2','sell2','sell','sell2@gmail.com','0523452542','',2,1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7IlVzZXJJRCI6IlMwMiIsIlVzZXJOYW1lIjoic2VsbDIiLCJSb2xlIjoyLCJGdWxsTmFtZSI6InNlbGwifSwiaWF0IjoxNjg0OTM1MDk0LCJleHAiOjE3MTY0NzEwOTR9.nHO8WTHAQrPrbj0x41ObcUXY7JtzV2ZfvxJH98M_RZ4'),('S03','sell3','sell3','sell','sell3@gmail.com','0274525845','',2,1,NULL),('S04','sell4','sell4','sell','sell4@gmail.com','0956842357','',2,1,NULL),('S05','sell5','sell5','sell','sell5@gmail.com','0512369756','',2,0,NULL),('U1684437841','abc','abc','abc','abc','0192301293','',1,1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7IlVzZXJJRCI6IlUxNjg0NDM3ODQxIiwiVXNlck5hbWUiOiJhYmMiLCJSb2xlIjoxLCJGdWxsTmFtZSI6ImFiYyJ9LCJpYXQiOjE2ODQ5MzUzOTgsImV4cCI6MTcxNjQ3MTM5OH0.-GIfmLrqDYLMXmibZMd3xofjZHxjWAHgGfwf9reVvIw'),('U1684438321','abc31','abc','abc32','abc','24234234','',1,1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7IlVzZXJJRCI6IlUxNjg0NDM4MzIxIiwiVXNlck5hbWUiOiJhYmMzMSIsIlBhc3N3b3JkIjoiYWJjIiwiRnVsbE5hbWUiOiJhYmMzMiIsIkVtYWlsIjoiYWJjIiwiUGhvbmUiOiIyNDIzNDIzNCIsIkF2YXRhciI6IiIsIlJvbGUiOjEsIklzQWN0aXZlIjoxLCJSZWZyZXNoVG9rZW4iOm51bGx9LCJpYXQiOjE2ODQ0MzgzMjEsImV4cCI6MTcxNTk3NDMyMX0.xN161yAhPg0EeA1Z9Oqkb59taw43m8llkvKrF6sn2c0');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -374,14 +509,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Dumping events for database 'agrimarket'
---
-
---
--- Dumping routines for database 'agrimarket'
---
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -392,4 +519,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-20 17:10:45
+-- Dump completed on 2023-05-24 20:42:13
