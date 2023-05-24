@@ -25,9 +25,9 @@ CartItem.getByUserId = function (id, result) {
                     } else {
                         // Thêm thông tin chi tiết của Product vào mảng products
                         products.push({
-                            CartItemID : cartitems[index].CartItemID,
-                            Quantity : cartitems[index].Quantity,
-                            SumPrice : cartitems[index].SumPrice,
+                            CartItemID: cartitems[index].CartItemID,
+                            Quantity: cartitems[index].Quantity,
+                            SumPrice: cartitems[index].SumPrice,
                             ProductID: product[0].ProductID,
                             ProductName: product[0].ProductName,
                             ProductPrice: product[0].ProductPrice,
@@ -118,10 +118,15 @@ CartItem.changeQuantity = function (data, result) {
         , [data.ChangeAmount, data.CartItemID]
         , function (err, cartitem) {
             if (err || cartitem.affectedRows == 0) {
-                result(cartitem);
+                result(null);
             }
-            else
-                result(cartitem);
+            else {
+                db.query("SELECT SumPrice from cartitem WHERE CartItemID =?"
+                    , [data.CartItemID]
+                    , function (err, SumPrice) {
+                        result(SumPrice[0]);
+                    })
+            }
         });
 }
 

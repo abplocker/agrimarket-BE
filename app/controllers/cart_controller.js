@@ -40,7 +40,7 @@ exports.addOneCartItem = function (req, res) {
 exports.changeQuantity = function (req, res) {
     Cart.changeQuantity(req.body, function (data) {
         if (data == null)
-            res.status(400).send("Sản phẩm không tồn tại");
+            res.status(400).send({result: "Sản phẩm không tồn tại"});
         else
             res.status(200).send({ result: data });
     });
