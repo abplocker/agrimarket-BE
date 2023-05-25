@@ -62,7 +62,7 @@ CREATE TABLE `cartitem` (
   KEY `FK_CartItem_Product` (`ProductID`),
   CONSTRAINT `FK_CartItem_Product` FOREIGN KEY (`ProductID`) REFERENCES `product` (`ProductID`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `FK_CartItem_User` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`)
-) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,7 +71,7 @@ CREATE TABLE `cartitem` (
 
 LOCK TABLES `cartitem` WRITE;
 /*!40000 ALTER TABLE `cartitem` DISABLE KEYS */;
-INSERT INTO `cartitem` VALUES (1,'A01','P01',3,3000.00),(2,'A01','P02',3,405.00),(3,'A01','P03',4,1160.00),(4,'A01','P04',5,3175.00),(5,'A01','P06',6,1248.00),(9,'A01','P05',7,553.00),(14,'A01','P08',8,1856.00),(36,'S01','P03',3,870.00),(37,'S01','P010',1,0.00),(38,'S01','P01',1,0.00),(39,'U1684438321','P03',5,1450.00),(44,'U1684437841','P01',14,14000.00);
+INSERT INTO `cartitem` VALUES (1,'A01','P01',2,2000.00),(2,'A01','P02',3,405.00),(3,'A01','P03',4,1160.00),(4,'A01','P04',5,3175.00),(5,'A01','P06',6,1248.00),(9,'A01','P05',7,553.00),(14,'A01','P08',8,1856.00),(36,'S01','P03',3,870.00),(37,'S01','P010',3,672.00),(38,'S01','P01',1,1000.00),(39,'U1684438321','P03',5,1450.00),(44,'U1684437841','P01',14,14000.00),(50,'U1684437841','P02',4,540.00);
 /*!40000 ALTER TABLE `cartitem` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -137,7 +137,7 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES ('C01','Hạt giống','','C01.png',1,NULL,NULL,'A01'),('C02','Thuốc trừ sâu','','C02.png',1,NULL,NULL,'A01'),('C03','Thuốc diệt nấm','','C03.png',1,NULL,NULL,'A01'),('C04','Thuốc tăng trưởng','','C04.png',1,NULL,NULL,'A01'),('C05','Thuốc diệt cỏ','','C05.png',1,NULL,NULL,'A01');
+INSERT INTO `category` VALUES ('C01','Hạt giống','','C01.png',1,NULL,NULL,'A01'),('C02','Thuốc trừ sâu','','C02.png',1,NULL,NULL,'A01'),('C03','Thuốc diệt nấm','','C03.png',1,NULL,NULL,'A01'),('C04','Thuốc tăng trưởng','','C04.png',1,NULL,NULL,'A01'),('C05','Thuốc diệt cỏ','','C05.png',1,NULL,NULL,'A01'),('C06','Máy móc, công cụ','','C06.png',1,NULL,NULL,'A01');
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -222,18 +222,19 @@ DROP TABLE IF EXISTS `orderdetail`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `orderdetail` (
-  `OrderDetailID` varchar(24) NOT NULL DEFAULT (_utf8mb4''),
+  `OrderDetailID` int NOT NULL AUTO_INCREMENT,
   `ProductID` varchar(24) NOT NULL DEFAULT (_utf8mb4''),
   `OrderID` varchar(24) NOT NULL DEFAULT (_utf8mb4''),
   `OrderDetailQuantity` int NOT NULL DEFAULT (0),
-  `OrderDetailPrice` decimal(18,2) NOT NULL DEFAULT (0),
+  `OrderDetailSumPrice` decimal(18,2) NOT NULL DEFAULT '0.00',
   `OrderDetailNote` decimal(18,2) NOT NULL DEFAULT (0),
+  `OrderDetailPriceOfProduct` int DEFAULT NULL,
   PRIMARY KEY (`OrderDetailID`),
-  KEY `FK_OrderDetail_Product` (`ProductID`),
   KEY `FK_OrderDetail_Orders` (`OrderID`),
+  KEY `FK_OrderDetail_Product` (`ProductID`),
   CONSTRAINT `FK_OrderDetail_Orders` FOREIGN KEY (`OrderID`) REFERENCES `orders` (`OrderID`),
   CONSTRAINT `FK_OrderDetail_Product` FOREIGN KEY (`ProductID`) REFERENCES `product` (`ProductID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -242,6 +243,7 @@ CREATE TABLE `orderdetail` (
 
 LOCK TABLES `orderdetail` WRITE;
 /*!40000 ALTER TABLE `orderdetail` DISABLE KEYS */;
+INSERT INTO `orderdetail` VALUES (1,'P02','O1684986397164',4,540.00,0.00,135),(2,'P01','O1684986397164',14,14000.00,0.00,1000),(3,'P02','O1684986502531',4,540.00,0.00,135),(4,'P01','O1684986502531',14,14000.00,0.00,1000);
 /*!40000 ALTER TABLE `orderdetail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -257,13 +259,12 @@ CREATE TABLE `orders` (
   `UserID` varchar(24) NOT NULL DEFAULT (_utf8mb4''),
   `Total` decimal(18,2) NOT NULL DEFAULT (0),
   `Date` datetime DEFAULT NULL,
-  `AddressID` varchar(24) NOT NULL DEFAULT (_utf8mb4''),
-  `Status` varchar(50) NOT NULL DEFAULT (_utf8mb4''),
+  `Address` varchar(24) DEFAULT '',
+  `PhoneNumber` varchar(12) DEFAULT NULL,
+  `Status` varchar(50) DEFAULT '',
   `OrdersCreatedAt` datetime DEFAULT NULL,
   `OrdersUpdatedAt` datetime DEFAULT NULL,
-  PRIMARY KEY (`OrderID`),
-  KEY `FK_Orders_Address` (`AddressID`),
-  CONSTRAINT `FK_Orders_Address` FOREIGN KEY (`AddressID`) REFERENCES `address` (`AddressID`)
+  PRIMARY KEY (`OrderID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -273,8 +274,44 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
+INSERT INTO `orders` VALUES ('O1684986120434','U1684437841',14540.00,NULL,'','','Chờ xác nhận','2023-05-25 10:42:00','2023-05-25 11:00:40'),('O1684986397164','U1684437841',14540.00,NULL,'','','Chờ xác nhận','2023-05-25 10:46:37','2023-05-25 11:00:40'),('O1684986502531','U1684437841',14540.00,NULL,'','','Chờ xác nhận','2023-05-25 10:48:22','2023-05-25 11:00:40');
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `orders_BEFORE_INSERT` BEFORE INSERT ON `orders` FOR EACH ROW BEGIN
+	SET NEW.OrdersCreatedAt = NOW();
+	SET NEW.Status = "Chờ xác nhận";
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `orders_BEFORE_UPDATE` BEFORE UPDATE ON `orders` FOR EACH ROW BEGIN
+	SET NEW.OrdersUpdatedAt = NOW();
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `post`
@@ -340,7 +377,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES ('P01','HẠT CÀ CHUA SAAHO TO 325',1000,'ĐẶC TRƯNG: nhà máy xác định, Tốt Ở lại màu xanh lá cây, tán lá màu xanh đậm, Bộ tản nhiệt tốt, Trái Cây Chắc Rất Tốt, Tiềm năng năng suất cao','',1,1000,'1999-01-01 00:00:00','2023-05-24 18:21:43','P01-1.png','C01','S01',4.5),('P010','THUỐC CỎ SEMPRA',224,'Thuốc diệt cỏ Sempra là loại thuốc diệt cỏ đầu tiên được giới thiệu ở Ấn Độ bởi Dhanuka Agritech Ltd để kiểm soát hiệu quả Cyperus rotundus.','',1,186,'1999-01-01 00:00:00','1999-01-01 00:00:00','P10-1.png','C05','S01',4),('P02','SURABHI CORIANDER',135,'Surabhi là giống rau mùi mạnh mẽ có tiềm năng năng suất tuyệt vời. Thích hợp cho nhiều vết cắt với lá rất hấp dẫn, to, sáng bóng, có mùi thơm. Là giống ra muộn nên có thể trồng quanh năm.','',1,164,'1999-01-01 00:00:00','1999-01-01 00:00:00','P02-1.png','C01','S01',5),('P03','HẠT GIỐNG DƯA CHUA LAI KRISH F1',290,'Lần Thu Hoạch Đầu Tiên- 30-35 Ngày, Số lượng hạt giống trên mỗi mẫu Anh-0,180-0,250 kg, Khoảng cách gieo hạt giữa hàng và luống-4-6 feet, Khoảng cách gieo hạt giữa các cây-1,5-2 feet','',1,1290,'1999-01-01 00:00:00','1999-01-01 00:00:00','P03-1.png','C01','S01',5),('P04','TIẾP XÚC THUỐC CÔN TRÙNG',635,'BASF Exponus là một loại thuốc diệt côn trùng mang tính cách mạng mang đến cho bạn sức mạnh đối với những loài côn trùng khó tính.','',1,546,'1999-01-01 00:00:00','1999-01-01 00:00:00','P04-1.png','C02','S01',5),('P05','THUỐC CÔN TRÙNG TAFGOR (DIMETHOATE 30% EC), KIỂM SOÁT SÂU RÂU VÀ SÂU MÚT',79,'Tafgor thuộc nhóm Organophosphate. Nó có hiệu quả cao trong việc kiểm soát sâu bướm và sâu bướm.','',1,598,'1999-01-01 00:00:00','1999-01-01 00:00:00','P05-1.png','C02','S01',5),('P06','THUỐC CÔN TRÙNG CORAGEN (CHLORANTRANILIPROLE 18,5% SC)',208,'Thuốc trừ sâu Coragen® là một loại thuốc trừ sâu Anthranilic diamide Broad Spectrum ở dạng đậm đặc huyền phù.','',1,200,'1999-01-01 00:00:00','1999-01-01 00:00:00','P06-1.png','C02','S01',5),('P07','Thuốc diệt nấm SAAF (CARBENDAZIM 12% + MANCOZEB 63% WP) KIỂM SOÁT BỆNH MỤN THÙ, SỮA BỤNG VÀ BỆNH RUST',80,'Một loại thuốc diệt nấm cổ điển đã được chứng minh với hành động tiếp xúc và có hệ thống. Chế độ diệt nấm hành động kép đáng tin cậy và được sử dụng rộng rãi nhất','',1,255,'1999-01-01 00:00:00','1999-01-01 00:00:00','P07-1.png','C03','S01',5),('P08','PHÂN BÓN VI LƯỢNG MULTIPLEX KRANTI',232,'Chứa các chất dinh dưỡng thiết yếu cho cây trồng (Chính, Phụ và Vi lượng). Hầu hết các chất dinh dưỡng ở dạng chelate.','',1,222,'1999-01-01 00:00:00','1999-01-01 00:00:00','P08-1.png','C04','S01',5),('P09','THUỐC CỎ ROUNDUP',186,'Thuốc diệt cỏ Roundup là sản phẩm chủ đạo trong lĩnh vực kinh doanh hóa chất nông nghiệp của Monsanto.','',1,186,'1999-01-01 00:00:00','2023-01-01 00:00:00','P09-1.png','C05','S01',4);
+INSERT INTO `product` VALUES ('P01','HẠT CÀ CHUA SAAHO TO 325',1000,'<h1>ĐẶC TRƯNG: Chịu nhiệt tốt: Loại cây này có khả năng chịu nhiệt tốt, không bị hỏng do thời tiết nóng.</h1>\n<h1>Trái cây cứng: Trái cây của loại cây này có độ cứng tốt.</h1>\n<h1>Tiềm năng sản lượng cao: Loại cây này có khả năng sinh trưởng và sản xuất trái cây với năng suất cao.</h1>\n<h1>ĐẶC ĐIỂM</h1>\n<h1>Sản lượng: Sản lượng trung bình: 25-40 tấn/acre&nbsp;</h1>\n<h1>(tuỳ thuộc vào mùa và phương pháp canh tác).</h1>\n<h1>Kích thước: Hình tròn.</h1>\n<h1>Hình dạng: Hình tròn phẳng, màu xanh đều.</h1>\n<h1>Trọng lượng: 80-100g.</h1>','',1,1000,'1999-01-01 00:00:00','2023-05-25 00:42:23','P01-1.png','C01','S01',4.5),('P010','THUỐC CỎ SEMPRA',224,'Thuốc diệt cỏ Sempra là loại thuốc diệt cỏ đầu tiên được giới thiệu ở Ấn Độ bởi Dhanuka Agritech Ltd để kiểm soát hiệu quả Cyperus rotundus.','',1,186,'1999-01-01 00:00:00','1999-01-01 00:00:00','P10-1.png','C05','S01',4),('P02','SURABHI CORIANDER',135,'Surabhi là giống rau mùi mạnh mẽ có tiềm năng năng suất tuyệt vời. Thích hợp cho nhiều vết cắt với lá rất hấp dẫn, to, sáng bóng, có mùi thơm. Là giống ra muộn nên có thể trồng quanh năm.','',1,164,'1999-01-01 00:00:00','1999-01-01 00:00:00','P02-1.png','C01','S01',5),('P03','HẠT GIỐNG DƯA CHUA LAI KRISH F1',290,'Lần Thu Hoạch Đầu Tiên- 30-35 Ngày, Số lượng hạt giống trên mỗi mẫu Anh-0,180-0,250 kg, Khoảng cách gieo hạt giữa hàng và luống-4-6 feet, Khoảng cách gieo hạt giữa các cây-1,5-2 feet','',1,1290,'1999-01-01 00:00:00','1999-01-01 00:00:00','P03-1.png','C01','S01',5),('P04','TIẾP XÚC THUỐC CÔN TRÙNG',635,'BASF Exponus là một loại thuốc diệt côn trùng mang tính cách mạng mang đến cho bạn sức mạnh đối với những loài côn trùng khó tính.','',1,546,'1999-01-01 00:00:00','1999-01-01 00:00:00','P04-1.png','C02','S01',5),('P05','THUỐC CÔN TRÙNG TAFGOR (DIMETHOATE 30% EC), KIỂM SOÁT SÂU RÂU VÀ SÂU MÚT',79,'Tafgor thuộc nhóm Organophosphate. Nó có hiệu quả cao trong việc kiểm soát sâu bướm và sâu bướm.','',1,598,'1999-01-01 00:00:00','1999-01-01 00:00:00','P05-1.png','C02','S01',5),('P06','THUỐC CÔN TRÙNG CORAGEN (CHLORANTRANILIPROLE 18,5% SC)',208,'Thuốc trừ sâu Coragen® là một loại thuốc trừ sâu Anthranilic diamide Broad Spectrum ở dạng đậm đặc huyền phù.','',1,200,'1999-01-01 00:00:00','1999-01-01 00:00:00','P06-1.png','C02','S01',5),('P07','Thuốc diệt nấm SAAF (CARBENDAZIM 12% + MANCOZEB 63% WP) KIỂM SOÁT BỆNH MỤN THÙ, SỮA BỤNG VÀ BỆNH RUST',80,'Một loại thuốc diệt nấm cổ điển đã được chứng minh với hành động tiếp xúc và có hệ thống. Chế độ diệt nấm hành động kép đáng tin cậy và được sử dụng rộng rãi nhất','',1,255,'1999-01-01 00:00:00','1999-01-01 00:00:00','P07-1.png','C03','S01',5),('P08','PHÂN BÓN VI LƯỢNG MULTIPLEX KRANTI',232,'Chứa các chất dinh dưỡng thiết yếu cho cây trồng (Chính, Phụ và Vi lượng). Hầu hết các chất dinh dưỡng ở dạng chelate.','',1,222,'1999-01-01 00:00:00','1999-01-01 00:00:00','P08-1.png','C04','S01',5),('P09','THUỐC CỎ ROUNDUP',186,'Thuốc diệt cỏ Roundup là sản phẩm chủ đạo trong lĩnh vực kinh doanh hóa chất nông nghiệp của Monsanto.','',1,186,'1999-01-01 00:00:00','2023-01-01 00:00:00','P09-1.png','C05','S01',4);
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -481,7 +518,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('A01','admin','admin','admin','admin@gmail.com','0123456789','',3,1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7IlVzZXJJRCI6IkEwMSIsIlVzZXJOYW1lIjoiYWRtaW4iLCJSb2xlIjozLCJGdWxsTmFtZSI6ImFkbWluIn0sImlhdCI6MTY4NDkxNzQyMywiZXhwIjoxNzE2NDUzNDIzfQ.fDi80zI2nxGODE_mFTe-LtE-FZjzQ5konLeVrvXAXBY'),('S01','sell','sell','sell','sell@gmail.com','08654852462','',2,1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7IlVzZXJJRCI6IlMwMSIsIlVzZXJOYW1lIjoic2VsbCIsIlJvbGUiOjIsIkZ1bGxOYW1lIjoic2VsbCJ9LCJpYXQiOjE2ODQ5MzUwODEsImV4cCI6MTcxNjQ3MTA4MX0.mpl50Fbeug_GObfykQs9OqzlWIMhdWdHWIgz7xBVZ1Y'),('S02','sell2','sell2','sell','sell2@gmail.com','0523452542','',2,1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7IlVzZXJJRCI6IlMwMiIsIlVzZXJOYW1lIjoic2VsbDIiLCJSb2xlIjoyLCJGdWxsTmFtZSI6InNlbGwifSwiaWF0IjoxNjg0OTM1MDk0LCJleHAiOjE3MTY0NzEwOTR9.nHO8WTHAQrPrbj0x41ObcUXY7JtzV2ZfvxJH98M_RZ4'),('S03','sell3','sell3','sell','sell3@gmail.com','0274525845','',2,1,NULL),('S04','sell4','sell4','sell','sell4@gmail.com','0956842357','',2,1,NULL),('S05','sell5','sell5','sell','sell5@gmail.com','0512369756','',2,0,NULL),('U1684437841','abc','abc','abc','abc','0192301293','',1,1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7IlVzZXJJRCI6IlUxNjg0NDM3ODQxIiwiVXNlck5hbWUiOiJhYmMiLCJSb2xlIjoxLCJGdWxsTmFtZSI6ImFiYyJ9LCJpYXQiOjE2ODQ5MzUzOTgsImV4cCI6MTcxNjQ3MTM5OH0.-GIfmLrqDYLMXmibZMd3xofjZHxjWAHgGfwf9reVvIw'),('U1684438321','abc31','abc','abc32','abc','24234234','',1,1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7IlVzZXJJRCI6IlUxNjg0NDM4MzIxIiwiVXNlck5hbWUiOiJhYmMzMSIsIlBhc3N3b3JkIjoiYWJjIiwiRnVsbE5hbWUiOiJhYmMzMiIsIkVtYWlsIjoiYWJjIiwiUGhvbmUiOiIyNDIzNDIzNCIsIkF2YXRhciI6IiIsIlJvbGUiOjEsIklzQWN0aXZlIjoxLCJSZWZyZXNoVG9rZW4iOm51bGx9LCJpYXQiOjE2ODQ0MzgzMjEsImV4cCI6MTcxNTk3NDMyMX0.xN161yAhPg0EeA1Z9Oqkb59taw43m8llkvKrF6sn2c0');
+INSERT INTO `users` VALUES ('A01','admin','admin','admin','admin@gmail.com','0123456789','',3,1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7IlVzZXJJRCI6IkEwMSIsIlVzZXJOYW1lIjoiYWRtaW4iLCJSb2xlIjozLCJGdWxsTmFtZSI6ImFkbWluIn0sImlhdCI6MTY4NDkxNzQyMywiZXhwIjoxNzE2NDUzNDIzfQ.fDi80zI2nxGODE_mFTe-LtE-FZjzQ5konLeVrvXAXBY'),('S01','sell','sell','sell','sell@gmail.com','08654852462','',2,1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7IlVzZXJJRCI6IlMwMSIsIlVzZXJOYW1lIjoic2VsbCIsIlJvbGUiOjIsIkZ1bGxOYW1lIjoic2VsbCJ9LCJpYXQiOjE2ODQ5MzcwNDIsImV4cCI6MTcxNjQ3MzA0Mn0.zNN8erB3NhgtVbPJJFH1oeGxDQ5LAAPl8Zg6oXO-6ZA'),('S02','sell2','sell2','sell','sell2@gmail.com','0523452542','',2,1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7IlVzZXJJRCI6IlMwMiIsIlVzZXJOYW1lIjoic2VsbDIiLCJSb2xlIjoyLCJGdWxsTmFtZSI6InNlbGwifSwiaWF0IjoxNjg0OTM1ODg1LCJleHAiOjE3MTY0NzE4ODV9.93439ze0xjsFa4SusU6wWCteOWCmAcKC2ziNpdQtiK8'),('S03','sell3','sell3','sell','sell3@gmail.com','0274525845','',2,1,NULL),('S04','sell4','sell4','sell','sell4@gmail.com','0956842357','',2,1,NULL),('S05','sell5','sell5','sell','sell5@gmail.com','0512369756','',2,0,NULL),('U1684437841','abc','abc','abc','abc','0192301293','',1,1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7IlVzZXJJRCI6IlUxNjg0NDM3ODQxIiwiVXNlck5hbWUiOiJhYmMiLCJSb2xlIjoxLCJGdWxsTmFtZSI6ImFiYyJ9LCJpYXQiOjE2ODQ5NTQwNTAsImV4cCI6MTcxNjQ5MDA1MH0.fOQY1TECqTepMK-fi90VkPFHHc74iulXSlT0Lf9ProY'),('U1684438321','abc31','abc','abc32','abc','24234234','',1,1,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7IlVzZXJJRCI6IlUxNjg0NDM4MzIxIiwiVXNlck5hbWUiOiJhYmMzMSIsIlBhc3N3b3JkIjoiYWJjIiwiRnVsbE5hbWUiOiJhYmMzMiIsIkVtYWlsIjoiYWJjIiwiUGhvbmUiOiIyNDIzNDIzNCIsIkF2YXRhciI6IiIsIlJvbGUiOjEsIklzQWN0aXZlIjoxLCJSZWZyZXNoVG9rZW4iOm51bGx9LCJpYXQiOjE2ODQ0MzgzMjEsImV4cCI6MTcxNTk3NDMyMX0.xN161yAhPg0EeA1Z9Oqkb59taw43m8llkvKrF6sn2c0');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -519,4 +556,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-24 20:42:13
+-- Dump completed on 2023-05-25 11:16:49
