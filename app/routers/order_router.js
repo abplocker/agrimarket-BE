@@ -6,4 +6,6 @@ module.exports = function (router) {
 
     router.post('/order/addDetail', orderController.addOrderDetail);
 
+    router.get('/order', orderController.getUserOrders);
+
 }
