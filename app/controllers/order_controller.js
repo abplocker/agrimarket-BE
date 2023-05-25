@@ -29,3 +29,15 @@ exports.getUserOrders = function (req, res) {
             });
         });
 }
+exports.getSellOrders = function (req, res) {
+    var token = req.get("Authorization");
+    JWT.checkAccessToken(token)
+        .then(result => {
+            Order.getSellOrders(result.data.UserID, function (data) {
+                if (data)
+                    res.status(200).send({ result: data })
+                else
+                    res.status(400).send({ result: data })
+            });
+        });
+}

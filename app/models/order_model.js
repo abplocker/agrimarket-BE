@@ -34,4 +34,19 @@ Order.getUserOrders = function (id, result) {
             result(results);
     });
 };
+Order.getSellOrders = function (id, result) {
+    const query = `
+        SELECT orders.OrderID, orders.Status, orderdetail.*, product.ProductImageDefault,product.ProductName
+        FROM orders
+        INNER JOIN orderdetail ON orders.OrderID = orderdetail.OrderID
+        INNER JOIN product ON orderdetail.ProductID = product.ProductID
+        WHERE product.UserID = ?
+    `;
+    db.query(query, id, function (err, results) {
+        if (err || results.length == 0)
+            result(err);
+        else
+            result(results);
+    });
+};
 module.exports = Order;

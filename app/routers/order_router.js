@@ -8,4 +8,7 @@ module.exports = function (router) {
 
     router.get('/order', orderController.getUserOrders);
 
+    router.get('/sell/order', orderController.getSellOrders);
+
+
 }
