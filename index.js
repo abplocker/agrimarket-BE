@@ -20,6 +20,8 @@ app.use(auth_middleware.isAuth);
 // Token hợp lệ, mới chạy vào các router sau.
 require('./app/routers/user_router')(app); 
 require('./app/routers/cart_router')(app); 
+require('./app/routers/order_router')(app); 
+
 // require('./app/routers/order_router')(app);...
 app.listen(3000, function () { 
 	console.log("Server listening on http://localhost:3000");
