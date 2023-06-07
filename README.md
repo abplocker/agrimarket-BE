@@ -1,9 +1,11 @@
-First install the module:
+# 1. Install module:
+Nodejs
+# 2. First install the module:
 npm i
 Create database agrimarket in mysql
 Then execute the file db_agrimarket_v2.sql to create a table for the database
 Then update the database connection configuration in app/config/mysql.js
-Running projects:
+# 3. Running projects:
 node index
 -----------------------------------------------------------------------------
 Đầu tiên thực hiện cài module:
